@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+*.egg-info/
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+
+# Secrets (defense in depth - currently none in repo, but enforce)
+.env
+.env.*
+*token*
+*secret*
+*.key
+
+# Large model caches (lives in ~/.cache/huggingface/, not in repo, but enforce)
+*.safetensors
+*.bin
+*.gguf
+
+# Runtime artifacts (kept small for commits, but exclude transient debug)
+*.log
+.ipynb_checkpoints/
