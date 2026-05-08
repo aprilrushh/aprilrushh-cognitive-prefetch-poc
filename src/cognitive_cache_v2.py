@@ -1,0 +1,217 @@
+"""cognitive_cache_v2.py - Token-level selective Cognitive Cache.
+
+PoC v2 Step 9-6b prototype (2026-05-07 D2).
+Path 1 architecture choices (locked in 9-6b-alpha):
+  K2 - pre-prefetched GPU subset + CPU backing (full K, V mirrored to CPU)
+  H3 - post-attention hook for predict (latency hide window: layer N->N+1 transition)
+  C2 - async predict_stream + prefetch_stream (overlap with main compute)
+
+Lifecycle per layer N:
+  [store]   update(K_new, V_new, N): mirror to CPU backing + delegate to base
+  [predict] post layer N attention: predictor on layer N+1 CPU K, V
+  [load]    prepare_load: gather token indices, async CPU->GPU stage
+  [serve]   layer N+1 update returns base full K, V (9-6b-beta-1 MVP)
+            token-level subset return wired in 9-6b-beta-2.
+"""
+
+from __future__ import annotations
+import torch
+from typing import Optional, Tuple, List, Dict, Any
+from transformers.cache_utils import DynamicCache
+
+
+class _NullCtx:
+    """No-op context manager for non-CUDA paths."""
+    def __enter__(self):
+        return self
+    def __exit__(self, *args):
+        return False
+
+
+class CognitiveCache_v2(DynamicCache):
+    """Token-level selective KV cache (9-6b-beta-1 skeleton).
+
+    Subclasses DynamicCache. Mirrors all K, V to CPU backing
+    on every update for token-level selective prefetch on
+    subsequent decode steps. GPU subset staging and the
+    post-attention hook entry point are implemented; the
+    return path still delegates fully to base (9-6b-beta-2
+    rewires return for the actual sparse-attention payoff).
+    """
+
+    def __init__(
+        self,
+        predictor: Any = None,
+        num_layers: int = 80,
+        device: str = "cuda",
+        offload_dtype=torch.float16,
+        enable_async: bool = True,
+    ):
+        super().__init__()
+        self.predictor = predictor
+        self.num_layers = num_layers
+        self.device_target = torch.device(device)
+        self.offload_dtype = offload_dtype
+        self.enable_async = enable_async
+
+        self._cpu_K: List[Optional[torch.Tensor]] = [None] * num_layers
+        self._cpu_V: List[Optional[torch.Tensor]] = [None] * num_layers
+        self._gpu_subset: List[Optional[Dict[str, torch.Tensor]]] = [None] * num_layers
+
+        if enable_async and torch.cuda.is_available():
+            self.predict_stream = torch.cuda.Stream()
+            self.prefetch_stream = torch.cuda.Stream()
+        else:
+            self.predict_stream = None
+            self.prefetch_stream = None
+
+        self.stats: Dict[str, Any] = {
+            "predicts": 0,
+            "prefetches": 0,
+            "fallbacks": 0,
+            "indices_log": [],
+            "pcie_d2h_bytes": 0,
+            "pcie_h2d_bytes": 0,
+            "pcie_subset_bytes": 0,
+        }
+
+    # ----- store path -----
+
+    def update(
+        self,
+        key_states: torch.Tensor,
+        value_states: torch.Tensor,
+        layer_idx: int,
+        cache_kwargs: Optional[Dict] = None,
+    ) -> Tuple[torch.Tensor, torch.Tensor]:
+        """Mirror the new K, V slice to CPU backing, then delegate to base."""
+        new_K_cpu = key_states.detach().to("cpu", non_blocking=True).to(self.offload_dtype)
+        new_V_cpu = value_states.detach().to("cpu", non_blocking=True).to(self.offload_dtype)
+        self.stats["pcie_d2h_bytes"] += new_K_cpu.numel() * new_K_cpu.element_size() + new_V_cpu.numel() * new_V_cpu.element_size()
+        if self._cpu_K[layer_idx] is None:
+            self._cpu_K[layer_idx] = new_K_cpu
+            self._cpu_V[layer_idx] = new_V_cpu
+        else:
+            self._cpu_K[layer_idx] = torch.cat([self._cpu_K[layer_idx], new_K_cpu], dim=2)
+            self._cpu_V[layer_idx] = torch.cat([self._cpu_V[layer_idx], new_V_cpu], dim=2)
+        return super().update(key_states, value_states, layer_idx, cache_kwargs)
+
+    # ----- load path -----
+
+    def prepare_load(self, layer_idx: int, indices: torch.Tensor) -> None:
+        """Gather a token-index subset from CPU backing; stage on GPU subset slot."""
+        if self._cpu_K[layer_idx] is None:
+            return
+        cpu_K = self._cpu_K[layer_idx]
+        cpu_V = self._cpu_V[layer_idx]
+        B, KVH, S, D = cpu_K.shape
+        U = indices.shape[1]
+        idx_exp = indices.view(B, 1, U, 1).expand(B, KVH, U, D).to(cpu_K.device)
+        K_sub_cpu = torch.gather(cpu_K, 2, idx_exp)
+        V_sub_cpu = torch.gather(cpu_V, 2, idx_exp)
+        stream = self.prefetch_stream
+        ctx = torch.cuda.stream(stream) if stream is not None else _NullCtx()
+        with ctx:
+            K_gpu = K_sub_cpu.to(self.device_target, non_blocking=True).to(torch.float16)
+            V_gpu = V_sub_cpu.to(self.device_target, non_blocking=True).to(torch.float16)
+            idx_gpu = indices.to(self.device_target, non_blocking=True)
+        self._gpu_subset[layer_idx] = {"indices": idx_gpu, "K": K_gpu, "V": V_gpu}
+        self.stats["prefetches"] += 1
+
+    # ----- serve path -----
+
+    def get_layer_subset(self, layer_idx: int) -> Optional[Dict[str, torch.Tensor]]:
+        return self._gpu_subset[layer_idx]
+
+    def discard_subset(self, layer_idx: int) -> None:
+        self._gpu_subset[layer_idx] = None
+
+    # ----- predict + prefetch combined hook -----
+
+    def post_attention_predict_and_load(
+        self,
+        current_q: torch.Tensor,
+        next_layer_idx: int,
+    ) -> None:
+        """Predictor on next layer's CPU K, V; stage GPU subset."""
+        if self.predictor is None:
+            return
+        if next_layer_idx >= self.num_layers:
+            return
+        if self._cpu_K[next_layer_idx] is None:
+            return
+        stream = self.predict_stream
+        ctx = torch.cuda.stream(stream) if stream is not None else _NullCtx()
+        try:
+            with ctx:
+                K_full = self._cpu_K[next_layer_idx].to(self.device_target, non_blocking=True).to(torch.float16)
+                V_full = self._cpu_V[next_layer_idx].to(self.device_target, non_blocking=True).to(torch.float16)
+                self.stats["pcie_h2d_bytes"] += K_full.numel() * K_full.element_size() + V_full.numel() * V_full.element_size()
+                result = self.predictor.predict(
+                    current_q=current_q,
+                    target_keys=K_full,
+                    target_values=V_full,
+                )
+                indices = result.predicted_indices
+                # sticky current token: ensure last position is always attended
+                B0, S0 = K_full.shape[0], K_full.shape[2]
+                last_pos = torch.full((B0, 1), S0 - 1, dtype=indices.dtype, device=indices.device)
+                indices = torch.cat([indices, last_pos], dim=1)
+                indices = torch.unique(indices.flatten()).unsqueeze(0).expand(B0, -1).contiguous()
+                self.stats["predicts"] += 1
+                self.stats["indices_log"].append((next_layer_idx, int(indices.shape[1]), int(indices[0, -1].item())))
+                B, KVH, S, D = K_full.shape
+                U = indices.shape[1]
+                idx_exp = indices.view(B, 1, U, 1).expand(B, KVH, U, D).to(K_full.device)
+                K_sub = torch.gather(K_full, 2, idx_exp).contiguous()
+                V_sub = torch.gather(V_full, 2, idx_exp).contiguous()
+                self.stats["pcie_subset_bytes"] += K_sub.numel() * K_sub.element_size() + V_sub.numel() * V_sub.element_size()
+                self._gpu_subset[next_layer_idx] = {
+                    "indices": indices.to(self.device_target),
+                    "K": K_sub,
+                    "V": V_sub,
+                }
+                self.stats["prefetches"] += 1
+                del K_full, V_full
+        except Exception:
+            self.stats["fallbacks"] += 1
+
+    # ----- introspection -----
+
+    def get_seq_length_cpu(self, layer_idx: int = 0) -> int:
+        if self._cpu_K[layer_idx] is None:
+            return 0
+        return int(self._cpu_K[layer_idx].shape[2])
+
+    def __repr__(self) -> str:
+        return (
+            "CognitiveCache_v2(num_layers={}, predicts={}, prefetches={}, fallbacks={})"
+        ).format(
+            self.num_layers,
+            self.stats["predicts"],
+            self.stats["prefetches"],
+            self.stats["fallbacks"],
+        )
+
+
+if __name__ == "__main__":
+    print("=== smoke 9-6b-beta-1 ===")
+    cache = CognitiveCache_v2(predictor=None, num_layers=4, device="cpu", enable_async=False)
+    print("Instantiated:", cache)
+    K = torch.randn(1, 8, 1, 128)
+    V = torch.randn(1, 8, 1, 128)
+    K_out, V_out = cache.update(K, V, 0)
+    print("update layer=0 K_out shape:", tuple(K_out.shape))
+    K2 = torch.randn(1, 8, 1, 128)
+    V2 = torch.randn(1, 8, 1, 128)
+    K_out2, V_out2 = cache.update(K2, V2, 0)
+    print("update layer=0 again K_out shape:", tuple(K_out2.shape))
+    print("CPU seq_length(0):", cache.get_seq_length_cpu(0))
+    indices = torch.tensor([[0, 1]], dtype=torch.long)
+    cache.prepare_load(0, indices)
+    subset = cache.get_layer_subset(0)
+    if subset is not None:
+        print("subset K shape:", tuple(subset["K"].shape))
+        print("subset indices:", subset["indices"].tolist())
+    print(cache)
+    print("Done")
