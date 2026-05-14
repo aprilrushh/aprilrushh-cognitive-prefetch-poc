@@ -1,0 +1,23 @@
+{
+  "name": "Solidigm D7-P5520",
+  "tier_role": "active",
+  "tier_label": "warehouse",
+  "purpose": "RAM->SSD idle promotion target (15min threshold)",
+  "verified_on": "2026-05-13",
+  "sources": [
+    "Solidigm D7-P5520/P5620 Product Brief (official)",
+    "StorageReview review 2022-05"
+  ],
+  "interface": "PCIe Gen4 x4 NVMe",
+  "nand": {"type": "TLC", "layer_count": 144, "generation": "3D NAND"},
+  "capacities_TB": [1.92, 3.84, 7.68, 15.36],
+  "sequential": {"read_MBps": 7100, "write_MBps": 4200},
+  "random_4k": {
+    "read_IOPS": 1100000,
+    "write_IOPS_spec": 200000,
+    "write_IOPS_measured_peak": 220000
+  },
+  "latency_us": {"qd1_read_4nines": 130},
+  "indirection_unit_KB": 4,
+  "endurance": {"dwpd": 1.0}
+}

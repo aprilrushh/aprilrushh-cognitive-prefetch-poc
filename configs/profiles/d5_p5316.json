@@ -1,0 +1,28 @@
+{
+  "name": "Solidigm D5-P5316",
+  "tier_role": "archive",
+  "tier_label": "deep_storage",
+  "purpose": "P5520->P5316 idle archive target (2h threshold)",
+  "verified_on": "2026-05-13",
+  "sources": [
+    "Solidigm D5-P5316 Product Brief (official)",
+    "StorageReview review 2021-12"
+  ],
+  "interface": "PCIe Gen4 x4 NVMe",
+  "nand": {"type": "QLC", "layer_count": 144, "generation": "3D NAND"},
+  "capacities_TB": [15.36, 30.72],
+  "sequential": {
+    "read_MBps": 7000,
+    "write_MBps_30TB": 3600,
+    "write_MBps_15TB": 3200
+  },
+  "random_4k": {
+    "read_IOPS": 800000,
+    "write_IOPS_steady_misaligned": 17000,
+    "write_MBps_64K_aligned": 510
+  },
+  "latency_us": {"qd1_read_99_999": 600},
+  "indirection_unit_KB": 64,
+  "indirection_unit_warning": "writes must be 64K-aligned; misaligned causes 2-4x write amplification. Demote stage must batch into 64K chunks.",
+  "endurance": {"dwpd": 0.41}
+}

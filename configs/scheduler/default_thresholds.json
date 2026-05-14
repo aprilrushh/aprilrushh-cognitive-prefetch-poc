@@ -1,0 +1,39 @@
+{
+  "version": "1.2",
+  "decided_on": "2026-05-13",
+  "decided_by": "Andy Lee (UmpaRumpa Chairman)",
+  "evidence_base": {
+    "dataset": "allenai/WildChat-1M",
+    "sample_size_conversations": 200000,
+    "inter_conv_gaps_n": 148482,
+    "measurement_date": "2026-05-13",
+    "method": "Method A (Inter-conversation idle: conv[i+1].start - conv[i].last_assistant_turn.timestamp)",
+    "percentiles_seconds": {
+      "P25": 178, "P50": 937, "P75": 8138, "P90": 81676, "P95": 175519
+    }
+  },
+  "thresholds": {
+    "hbm_to_ram": {
+      "seconds": 30,
+      "label": "30s",
+      "premature_rate_pct": 6.0,
+      "rationale": "OK; low premature, low cost"
+    },
+    "ram_to_ssd_active": {
+      "seconds": 900,
+      "label": "15min (P50 median)",
+      "premature_rate_pct": 50,
+      "rationale": "WildChat-1M inter-conv P50 = 15min 37s"
+    },
+    "ssd_active_to_archive": {
+      "seconds": 7200,
+      "label": "2h (P75)",
+      "premature_rate_pct": 26,
+      "rationale": "WildChat-1M inter-conv P75 = 2h 15min 38s"
+    }
+  },
+  "session_aware": true,
+  "session_aware_note": "Within-conversation idle does NOT trigger SSD transitions. Only inter-conversation idle (between user sessions) triggers HBM->RAM->SSD->Archive. Simple timer = punish users who pause mid-conversation.",
+  "configurable": true,
+  "configurable_note": "Production with smaller RAM (e.g. 64GB) may need shorter thresholds (more aggressive offload). Default tuned for H100 box 221GB RAM."
+}
