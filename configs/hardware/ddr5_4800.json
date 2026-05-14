@@ -1,0 +1,23 @@
+{
+  "spec_name": "DDR5-4800 server-class",
+  "verified_on": "2026-05-14",
+  "sources": [
+    "https://www.anandtech.com/show/16143/insights-into-ddr5-subtimings-and-latencies",
+    "https://www.micron.com/products/memory/dram-components/ddr5-sdram",
+    "JEDEC JESD79-5 DDR5 standard"
+  ],
+  "per_channel_peak_gb_s": 38.4,
+  "per_channel_peak_note": "theoretical, DDR5-4800B (40-40-40 timings)",
+  "server_8_channel_stream_gb_s": 250,
+  "server_8_channel_stream_note": "STREAM-derived, ~70% of theoretical 8×38.4=307. Practical sustained, used for emulator inter-tier",
+  "server_12_channel_stream_gb_s": 378,
+  "server_12_channel_stream_note": "Micron Austin Lab, EPYC 9654 (96 cores)",
+  "first_access_latency_ns": 16.67,
+  "first_access_note": "CAS40 timings, tCK 0.42ns, per DDR5-4800B subtimings",
+  "voltage_v": 1.1,
+  "bus_width_per_dimm_bits": 64,
+  "subchannels_per_dimm": 2,
+  "ecc_supported": true,
+  "emulator_choice_gb_s": 250,
+  "emulator_choice_note": "8-channel server config, sustained STREAM-grade. Used in latency_model for RAM tier."
+}

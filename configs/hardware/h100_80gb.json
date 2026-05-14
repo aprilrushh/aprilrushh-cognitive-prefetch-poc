@@ -1,0 +1,27 @@
+{
+  "spec_name": "NVIDIA H100 80GB (SXM5)",
+  "verified_on": "2026-05-14",
+  "sources": [
+    "https://www.nvidia.com/en-us/data-center/h100/",
+    "https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/",
+    "H100 datasheet PB-11133-001"
+  ],
+  "hbm_capacity_gb": 80,
+  "hbm_type": "HBM3 (SXM5) / HBM2e (PCIe)",
+  "hbm_bandwidth_gb_s_sxm": 3350,
+  "hbm_bandwidth_gb_s_pcie": 2000,
+  "l2_cache_mb": 50,
+  "pcie_gen5_x16_theoretical_bidirectional_gb_s": 128,
+  "pcie_gen5_x16_theoretical_per_direction_gb_s": 64,
+  "pcie_gen5_x16_empirical_per_direction_gb_s": 52,
+  "pcie_gen5_x16_empirical_note": "Measured 2026-05-14 on our H100 box: M1.3 Method A 50.6 GB/s, M1.3 Method B (DynamicCache) 44.2 GB/s, M1.4 concurrent 55.2 GB/s. Average raw = 52 GB/s = 81% of theoretical. THIS is the emulator anchor for HBM<->RAM PCIe transfer.",
+  "pcie_gen5_x16_empirical_pct_theoretical": 0.81,
+  "tdp_watts_sxm": 700,
+  "tdp_watts_pcie": 350,
+  "transistors_billion": 80,
+  "sm_count": 132,
+  "tensor_core_fp8_tflops_sparse": 3958,
+  "nvlink_bandwidth_gb_s": 900,
+  "emulator_choice_pcie_gb_s": 52,
+  "emulator_choice_note": "Empirical measurement on our H100, used for HBM<->RAM tier transfer latency"
+}

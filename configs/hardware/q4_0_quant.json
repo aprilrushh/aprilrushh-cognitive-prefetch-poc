@@ -1,0 +1,35 @@
+{
+  "spec_name": "llama.cpp q4_0 quantization (legacy, symmetric)",
+  "verified_on": "2026-05-14",
+  "sources": [
+    "https://github.com/ggml-org/llama.cpp/blob/master/ggml/src/ggml-quants.c",
+    "https://deepwiki.com/qualcomm/llama.cpp/3.4-quantization-formats",
+    "https://apxml.com/courses/practical-llm-quantization/chapter-5"
+  ],
+  "block_size_elements": 32,
+  "per_block_storage_bytes": 18,
+  "per_block_storage_breakdown": {
+    "fp16_scale_bytes": 2,
+    "packed_4bit_data_bytes": 16
+  },
+  "effective_bits_per_weight": 4.5,
+  "quantization_type": "symmetric, no zero-point",
+  "scale_formula": "d = amax / -8  (amax = max absolute value in block)",
+  "quantize_formula": "x_q = clamp(round(x/d + 8.5), 0, 15)  -> unsigned 4-bit",
+  "dequantize_formula": "x = (x_q - 8) * d",
+  "max_total_error": 0.002,
+  "max_error_source": "llama.cpp tests/test-quantize-fns.cpp",
+  "compression_ratio_vs_bf16": 3.56,
+  "compression_ratio_vs_bf16_calc": "16 bpw / 4.5 bpw = 3.56",
+  "v_only_kv_compression_pct": 35.9,
+  "v_only_kv_compression_calc": "K(bf16=16) + V(bf16=16) = 32 bpw total. After V-only quant: K(16) + V(4.5) = 20.5 bpw. Reduction = (32-20.5)/32 = 35.9%",
+  "v_only_kv_compression_correction_note": "PDF Page 4 claims 50% V reduce. Strict math = 35.9% total KV reduction OR 71.9% V-side reduction (V: 16->4.5=71.9% smaller). PDF wording ambiguous; v1.7 ledger correction 19 will reconcile.",
+  "honest_anchor_candidate_6": "V-only q4_0 compresses TOTAL KV by 35.9% (not 50%); V-side alone shrinks by 71.9%. The 'memory wall' that V-only addresses must be quantified honestly: 10.49 GB bf16 KV becomes 6.72 GB after V-only q4_0 (not 5.24 GB as 50% would imply).",
+  "kv_size_calculation_32k_70b": {
+    "bf16_total_gb": 10.49,
+    "v_only_q4_0_total_gb": 6.72,
+    "v_only_q4_0_total_gb_calc": "K = 1*8*32K*128*2 bytes/layer * 80 layers = 5.24 GB. V (4.5 bpw) = 1*8*32K*128*0.5625 bytes/layer * 80 layers = 1.48 GB. Total = 6.72 GB.",
+    "savings_gb": 3.77,
+    "savings_pct": 35.9
+  }
+}
