@@ -1,11 +1,13 @@
-"""XHBM-Bench v2: Idle-driven KV cache tier emulator + scheduler.
-
-Built on verified Solidigm spec sheet profiles (D7-P5520 active, D5-P5316 archive)
-and WildChat-1M 200K measurement-based threshold config.
-"""
+"""XHBM-Bench v2: Idle-driven KV cache tier emulator + scheduler."""
 from .profiles import (
     SSDProfile, ThresholdConfig,
     load_profile, load_thresholds, load_defaults,
 )
+from .latency_model import (
+    LatencyModel, LatencyResult,
+    PCIE_GEN4_X4_THEORETICAL_MBPS, PCIE_GEN4_X4_PRACTICAL_MBPS,
+)
 __all__ = ["SSDProfile", "ThresholdConfig",
-           "load_profile", "load_thresholds", "load_defaults"]
+           "load_profile", "load_thresholds", "load_defaults",
+           "LatencyModel", "LatencyResult",
+           "PCIE_GEN4_X4_THEORETICAL_MBPS", "PCIE_GEN4_X4_PRACTICAL_MBPS"]
