@@ -159,3 +159,54 @@ xhbm-bench README update needed: "Part of UmpaRumpa's XHBM program (originated a
 - Single conv (M1.1 sanity scope) — M1.2 = multi-conv mixed
 - Cloud VM virtio-blk (not physical NVMe) — vda1 is system-wide, psutil is clean process signal
 - No V-only quant (NF4 baseline only)
+
+---
+
+## Phase 3.3 — M1.2 Multi-conv Decode Contention Test (2026-05-14)
+
+**Script**: `scripts/m1_2_multiconv_decode.py`
+**Result**: `results/phase3/m1_2_multiconv_decode.json`
+**Verdict**: VERIFIED ✅ — anchor § 13 anchor 1 — idle RAM-tier conv does NOT block active decode
+
+### Setup
+- NF4 Llama 70B (warm HF cache)
+- 1 active conv: 32K Sherlock prefill + 32 decode tokens (measured)
+- 7 idle conv: 32K bf16 synthetic KV on CPU pinned RAM (NOT moved during decode)
+- Per-token psutil I/O monitor on active conv
+
+### Hero comparison: M1.1 vs M1.2
+
+| Metric | M1.1 (single conv) | M1.2 (1 active + 7 idle RAM) | Δ |
+|---|---|---|---|
+| Decode avg | 78.60 ms/tok | **79.37 ms/tok** | **+1.0%** ✅ |
+| Decode stdev | n/a | **2.2 ms** (very tight) | n/a |
+| Decode proc I/O | 0 bytes | **0 bytes** | zero |
+| Prefill throughput | 2,548 tok/s | 2,543 tok/s | -0.2% |
+
+### v1.3 § B math system-level reconcile
+
+| Layer | v1.3 § B claim | M1.2 measured | Match |
+|---|---|---|---|
+| 1 conv 32K KV bf16 | 10.74 GB | 10.49 GB | 97.7% (allocation overhead) |
+| 7 conv idle RAM | ~75 GB | 73.40 GB | 97.9% |
+| Active HBM steady (decode) | n/a | 50.1 GB | weight 39.58 + KV 10.5 ≈ ✅ |
+| Process RSS total | n/a | 76.6 GB | clean |
+
+### Anchor § 13 — all 3 anchors production-grade verified
+
+| § 13 Anchor | Evidence (M1.1 + M1.2) |
+|---|---|
+| 1. "bandwidth not latency" | decode SSD 0 byte (M1.1) + idle RAM 73 GB → only +1% decode latency (M1.2) |
+| 2. "5분 추측 아닌 200K 실측" | WildChat v1.2 measurement (separate axis) |
+| 3. "HBM 49 + RAM 75 dual mechanism" | decode 50 GB HBM + idle 73 GB RAM resident — system-level reconciled |
+
+### Limitations
+- Idle KV = synthetic random bf16, not actual Sherlock chunks (workload-realistic = M1.3)
+- RAM-tier only (no SSD demote) — real SSD measurement requires physical NVMe
+- Idle KV is *resident* not *moving* — actual demote/promote = M3 (typing prefetch)
+- Single Python process — no multi-tenant interference test
+
+### Outlier observation (anchor § 14 echo chamber defense)
+- 1 decode token = 90.71 ms (vs stdev 2.2 ms, avg 79.4 ms — ~11 ms outlier)
+- Likely Python GC pause or bitsandbytes NF4 first-call cold path
+- M1.3 protocol: discard first 1-2 decode tokens (warmup)

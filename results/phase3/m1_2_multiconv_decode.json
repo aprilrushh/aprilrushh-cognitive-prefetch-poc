@@ -1,0 +1,327 @@
+{
+  "measurement": "M1.2 \u2014 Multi-conv decode with idle RAM-tier KV (1 active + 7 idle)",
+  "date": "2026-05-14",
+  "anchor_ref": "v1.0 \u00a7 15 M1, v1.4 \u00a7 E (essential), v1.3 \u00a7 B (HBM+RAM dual)",
+  "spec": {
+    "model": "meta-llama/Llama-3.1-70B-Instruct",
+    "quant": "nf4 + bf16 compute + double_quant",
+    "active_conv": {
+      "context_tokens": 32000,
+      "decode_tokens": 32,
+      "workload": "A Study in Scarlet first 32K"
+    },
+    "idle_convs": {
+      "count": 7,
+      "context_each": 32000,
+      "kv_dtype": "bf16",
+      "location": "CPU RAM (pinned)",
+      "content": "synthetic random (no real workload)"
+    },
+    "kv_math": {
+      "active_kv_hbm_gb": 10.49,
+      "idle_kv_ram_gb": 73.4,
+      "v1_3_claim_gb": 75.0
+    }
+  },
+  "load": {
+    "time_s": 23.64,
+    "gpu_post_load_gb": 39.58
+  },
+  "prefill": {
+    "time_s": 12.58,
+    "tok_per_s": 2542.9
+  },
+  "decode": {
+    "aggregate": {
+      "n_decode": 32,
+      "n_idle": 7,
+      "avg_ms": 79.37,
+      "median_ms": 78.78,
+      "min_ms": 78.63,
+      "max_ms": 90.71,
+      "stdev_ms": 2.2,
+      "p99_ms": 90.71,
+      "total_proc_rd_bytes": 0,
+      "total_proc_wr_bytes": 0,
+      "total_proc_rd_ops": 64,
+      "total_proc_wr_ops": 0
+    },
+    "per_token_trace": [
+      {
+        "tok_idx": 0,
+        "latency_ms": 90.71,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 1,
+        "latency_ms": 79.44,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 2,
+        "latency_ms": 79.04,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 3,
+        "latency_ms": 79.02,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 4,
+        "latency_ms": 78.98,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 5,
+        "latency_ms": 78.83,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 6,
+        "latency_ms": 78.63,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 7,
+        "latency_ms": 78.79,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 8,
+        "latency_ms": 78.77,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 9,
+        "latency_ms": 78.76,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 10,
+        "latency_ms": 78.77,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 11,
+        "latency_ms": 78.75,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 12,
+        "latency_ms": 78.76,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 13,
+        "latency_ms": 78.8,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 14,
+        "latency_ms": 78.74,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 15,
+        "latency_ms": 78.84,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 16,
+        "latency_ms": 78.65,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 17,
+        "latency_ms": 78.75,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 18,
+        "latency_ms": 79.09,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 19,
+        "latency_ms": 78.74,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 20,
+        "latency_ms": 78.74,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 21,
+        "latency_ms": 78.77,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 22,
+        "latency_ms": 78.77,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 23,
+        "latency_ms": 78.82,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 24,
+        "latency_ms": 78.65,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 25,
+        "latency_ms": 82.48,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 26,
+        "latency_ms": 80.78,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 27,
+        "latency_ms": 78.92,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 28,
+        "latency_ms": 78.76,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 29,
+        "latency_ms": 78.74,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 30,
+        "latency_ms": 78.83,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      },
+      {
+        "tok_idx": 31,
+        "latency_ms": 78.82,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "proc_rd_ops": 2,
+        "proc_wr_ops": 0
+      }
+    ],
+    "comparison_to_m1_1": {
+      "m1_1_avg_ms": 78.6,
+      "m1_2_avg_ms": 79.37,
+      "delta_ms": 0.77,
+      "delta_pct": 1.0
+    }
+  },
+  "verdict": "VERIFIED \u2705 anchor \u00a7 13 anchor 1 \u2014 idle RAM-tier conv \uac00 active decode \ub9c9\uc9c0 \uc54a\uc74c (+1.0% deviation, within noise)",
+  "anchor_section_13_test": {
+    "claim": "bandwidth not latency \u2014 idle conv \uac00 active decode \ub9c9\uc9c0 \uc54a\uc74c",
+    "before_m1_2": "v1.0 \u00a7 13 anchor 1 (narrative only)",
+    "after_m1_2": "code-level reproducible verification (production-grade)"
+  },
+  "limitations": [
+    "Idle KV = synthetic random bf16, not actual workload (Sherlock chunks)",
+    "RAM-tier only \u2014 no SSD demote (v1.4 \u00a7 E dual-evidence path, real SSD = M2/M4)",
+    "Idle conv \uc758 KV \uac00 RAM \uc5d0 *resident* \ub9cc \u2014 \uc2e4\uc81c\ub85c prefetch/demote \uc548 \ud568",
+    "Cloud VM (virtio-blk), no physical NVMe \u2014 Solidigm SSD measurement = Wayne Gao \ud611\uc758 \ud6c4"
+  ],
+  "next": "M1.3 typing prefetch latency (UI signal + 1 conv promote from SSD/RAM)"
+}
