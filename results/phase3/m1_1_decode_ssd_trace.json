@@ -1,0 +1,402 @@
+{
+  "measurement": "M1.1 \u2014 Decode SSD I/O byte trace (single conv NF4 70B baseline)",
+  "date": "2026-05-14",
+  "anchor_ref": "v1.0 \u00a7 15 M1, v1.4 \u00a7 E (essential)",
+  "spec": {
+    "model": "meta-llama/Llama-3.1-70B-Instruct",
+    "quant": "nf4 + bf16 compute_dtype + double_quant",
+    "kv_quant": "none (bf16 native, V-only deferred per v1.4 \u00a7 E)",
+    "context_tokens": 32000,
+    "n_decode_tokens": 32,
+    "workload": "A Study in Scarlet first 32K tokens"
+  },
+  "load": {
+    "time_s": 23.57,
+    "gpu_gb": 39.58
+  },
+  "prefill": {
+    "time_s": 12.56,
+    "tokens_per_s": 2548.5,
+    "proc_read_count": 3,
+    "proc_write_count": 8,
+    "proc_read_bytes": 0,
+    "proc_write_bytes": 0,
+    "disk_vda1_read_bytes": 0,
+    "disk_vda1_write_bytes": 151552
+  },
+  "decode": {
+    "n_tokens": 32,
+    "aggregate": {
+      "proc_rd_count": 96,
+      "proc_wr_count": 0,
+      "proc_rd_bytes": 0,
+      "proc_wr_bytes": 0,
+      "vda1_rd_bytes": 0,
+      "vda1_wr_bytes": 12288,
+      "avg_latency_ms": 78.56875000000001,
+      "total_decode_s": 2.5142
+    },
+    "per_token_trace": [
+      {
+        "tok_idx": 0,
+        "latency_ms": 86.37,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 4805
+      },
+      {
+        "tok_idx": 1,
+        "latency_ms": 78.41,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 1935
+      },
+      {
+        "tok_idx": 2,
+        "latency_ms": 78.22,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 2512
+      },
+      {
+        "tok_idx": 3,
+        "latency_ms": 78.39,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 315
+      },
+      {
+        "tok_idx": 4,
+        "latency_ms": 78.34,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 757
+      },
+      {
+        "tok_idx": 5,
+        "latency_ms": 78.09,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 11
+      },
+      {
+        "tok_idx": 6,
+        "latency_ms": 78.14,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 1093
+      },
+      {
+        "tok_idx": 7,
+        "latency_ms": 83.16,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 264
+      },
+      {
+        "tok_idx": 8,
+        "latency_ms": 79.54,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 10868
+      },
+      {
+        "tok_idx": 9,
+        "latency_ms": 78.03,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 16616
+      },
+      {
+        "tok_idx": 10,
+        "latency_ms": 79.08,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 86508
+      },
+      {
+        "tok_idx": 11,
+        "latency_ms": 78.01,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 11
+      },
+      {
+        "tok_idx": 12,
+        "latency_ms": 77.97,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 358
+      },
+      {
+        "tok_idx": 13,
+        "latency_ms": 78.21,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 12288,
+        "tok_id": 690
+      },
+      {
+        "tok_idx": 14,
+        "latency_ms": 77.93,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 11
+      },
+      {
+        "tok_idx": 15,
+        "latency_ms": 78.06,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 1093
+      },
+      {
+        "tok_idx": 16,
+        "latency_ms": 78.02,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 264
+      },
+      {
+        "tok_idx": 17,
+        "latency_ms": 78.02,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 10868
+      },
+      {
+        "tok_idx": 18,
+        "latency_ms": 78.01,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 2950
+      },
+      {
+        "tok_idx": 19,
+        "latency_ms": 78.03,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 791
+      },
+      {
+        "tok_idx": 20,
+        "latency_ms": 77.98,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 2697
+      },
+      {
+        "tok_idx": 21,
+        "latency_ms": 78.04,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 3828
+      },
+      {
+        "tok_idx": 22,
+        "latency_ms": 77.94,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 57220
+      },
+      {
+        "tok_idx": 23,
+        "latency_ms": 78.14,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 7018
+      },
+      {
+        "tok_idx": 24,
+        "latency_ms": 77.92,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 1077
+      },
+      {
+        "tok_idx": 25,
+        "latency_ms": 78.0,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 6206
+      },
+      {
+        "tok_idx": 26,
+        "latency_ms": 78.05,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 3871
+      },
+      {
+        "tok_idx": 27,
+        "latency_ms": 77.94,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 11
+      },
+      {
+        "tok_idx": 28,
+        "latency_ms": 78.02,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 323
+      },
+      {
+        "tok_idx": 29,
+        "latency_ms": 78.02,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 6137
+      },
+      {
+        "tok_idx": 30,
+        "latency_ms": 78.04,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 311
+      },
+      {
+        "tok_idx": 31,
+        "latency_ms": 78.08,
+        "proc_rd_count": 3,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 2019
+      }
+    ]
+  },
+  "verdict": "VERIFIED \u2705 anchor \u00a7 15 M1 \u2014 decode critical path is SSD-free (process I/O < 10 KB)",
+  "limitations": [
+    "Single conv only (M1.1 sanity scope). Multi-conv idle interference = M1.2.",
+    "Cloud VM virtio-blk (NOT physical NVMe) \u2014 vda1 noise = HF cache + OS, not KV/weight",
+    "Process-scoped I/O (psutil) = clean signal for the M1 claim",
+    "No V-only quant (v1.4 \u00a7 E dual-evidence path)"
+  ],
+  "next": "M1.2 \u2014 multi-conv mixed (1 active decode + idle conv background)"
+}

@@ -120,3 +120,42 @@ Total: 9 commits, 1 fixup, 2 tags. ~1,373 LOC + JSON.
 
 UmpaRumpa (single brand, external). Blue Intelligence = historical origin (Andy ownership).
 xhbm-bench README update needed: "Part of UmpaRumpa's XHBM program (originated as Blue Intelligence)".
+
+---
+
+## Phase 3.2 — M1.1 Decode SSD I/O Trace (2026-05-14)
+
+**Script**: `scripts/m1_1_decode_ssd_trace.py`
+**Result**: `results/phase3/m1_1_decode_ssd_trace.json`
+**Verdict**: VERIFIED ✅ — anchor § 15 M1 — decode critical path is SSD-free
+
+### Setup
+- NF4 Llama 70B (bf16 compute_dtype, double_quant)
+- 1 conv x 32K context (A Study in Scarlet first 32K of 61,915 tokens)
+- 32 decode tokens, per-token psutil + diskstats I/O measurement
+- No V-only quant (v1.4 § E dual-evidence path, NF4 baseline)
+
+### Measurements
+
+| Phase | Latency | GPU memory | Process I/O |
+|---|---|---|---|
+| Load (warm HF cache) | 23.57s | 39.58 GB | n/a |
+| Prefill (32K tokens) | 12.56s (2,548 tok/s) | peak 58.31 GB | 0 MB read, 3 ops |
+| Decode (32 tokens) | 78.6 ms/tok (12.72 tok/s) | 50.1 GB | **0 bytes, 96 metadata ops** |
+| vda1 system noise (decode) | n/a | n/a | 0 rd / 12 KB wr (kernel journal) |
+
+### KV math reconcile (extension of v1.3 § B)
+- Prefill peak 58.31 GB = NF4 weight 39.58 + KV bf16 ~10.74 + prefill activation ~8.0
+- Decode steady 50.1 GB = NF4 weight 39.58 + KV bf16 ~10.52 (matches v1.3 § B claim 10.74 GB)
+- New observation: prefill activation transient (~8 GB) is the unstated component of PDF Page 7 peak
+
+### Anchor § 13 dual-evidence verification (first H100 instance)
+
+- Lambda Labs 2026-04-15: V-only quant cos_sim 1.000000 (theory verified)
+- UmpaRumpa H100 2026-05-14: decode SSD I/O = 0 bytes (production code verified)
+- Together: anchor § 13 anchor 1 "bandwidth not latency" — *first reproducible code-level instance*
+
+### Limitations
+- Single conv (M1.1 sanity scope) — M1.2 = multi-conv mixed
+- Cloud VM virtio-blk (not physical NVMe) — vda1 is system-wide, psutil is clean process signal
+- No V-only quant (NF4 baseline only)
