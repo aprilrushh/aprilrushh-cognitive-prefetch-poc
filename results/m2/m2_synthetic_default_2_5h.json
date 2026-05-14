@@ -1,0 +1,757 @@
+{
+  "scenario_meta": {
+    "scenario": "default_2_5h",
+    "generator": "StaggeredUniformGenerator",
+    "n_conversations": 8,
+    "duration_seconds": 9000,
+    "stagger_seconds": 600,
+    "turn_interval_seconds": 1500,
+    "decided": "Andy 2026-05-13: 2.5h to guarantee 4-tier visit (2h had conv0 max idle=95min < 2h archive threshold)",
+    "expected_transitions": "4-tier full chain: conv0 (first) reaches 2h idle at t=1500+7200=8700 < 9000"
+  },
+  "tick_seconds": 30,
+  "duration_seconds": 9000,
+  "n_blocks": 8,
+  "n_transitions": 41,
+  "n_prefetch": 8,
+  "tier_visit_counts": {
+    "HBM": 8,
+    "RAM": 8,
+    "SSD_ACTIVE": 8,
+    "SSD_ARCHIVE": 1
+  },
+  "per_tier_dwell_seconds": {
+    "HBM": 17280.0,
+    "RAM": 13920.0,
+    "SSD_ACTIVE": 40500.0,
+    "SSD_ARCHIVE": 300.0
+  },
+  "per_block_summary_seconds": {
+    "conv0": {
+      "HBM": 60.0,
+      "RAM": 1740.0,
+      "SSD_ACTIVE": 6900.0,
+      "SSD_ARCHIVE": 300.0
+    },
+    "conv1": {
+      "HBM": 660.0,
+      "RAM": 1740.0,
+      "SSD_ACTIVE": 6600.0,
+      "SSD_ARCHIVE": 0.0
+    },
+    "conv2": {
+      "HBM": 1260.0,
+      "RAM": 1740.0,
+      "SSD_ACTIVE": 6000.0,
+      "SSD_ARCHIVE": 0.0
+    },
+    "conv3": {
+      "HBM": 1860.0,
+      "RAM": 1740.0,
+      "SSD_ACTIVE": 5400.0,
+      "SSD_ARCHIVE": 0.0
+    },
+    "conv4": {
+      "HBM": 2460.0,
+      "RAM": 1740.0,
+      "SSD_ACTIVE": 4800.0,
+      "SSD_ARCHIVE": 0.0
+    },
+    "conv5": {
+      "HBM": 3060.0,
+      "RAM": 1740.0,
+      "SSD_ACTIVE": 4200.0,
+      "SSD_ARCHIVE": 0.0
+    },
+    "conv6": {
+      "HBM": 3660.0,
+      "RAM": 1740.0,
+      "SSD_ACTIVE": 3600.0,
+      "SSD_ARCHIVE": 0.0
+    },
+    "conv7": {
+      "HBM": 4260.0,
+      "RAM": 1740.0,
+      "SSD_ACTIVE": 3000.0,
+      "SSD_ARCHIVE": 0.0
+    }
+  },
+  "intervals": [
+    {
+      "block_id": "conv0",
+      "tier": "HBM",
+      "t_start": 0.0,
+      "t_end": 30
+    },
+    {
+      "block_id": "conv1",
+      "tier": "HBM",
+      "t_start": 0.0,
+      "t_end": 630
+    },
+    {
+      "block_id": "conv0",
+      "tier": "RAM",
+      "t_start": 30,
+      "t_end": 900
+    },
+    {
+      "block_id": "conv2",
+      "tier": "HBM",
+      "t_start": 0.0,
+      "t_end": 1230
+    },
+    {
+      "block_id": "conv0",
+      "tier": "SSD_ACTIVE",
+      "t_start": 900,
+      "t_end": 1500
+    },
+    {
+      "block_id": "conv1",
+      "tier": "RAM",
+      "t_start": 630,
+      "t_end": 1500
+    },
+    {
+      "block_id": "conv0",
+      "tier": "HBM",
+      "t_start": 1500,
+      "t_end": 1530
+    },
+    {
+      "block_id": "conv3",
+      "tier": "HBM",
+      "t_start": 0.0,
+      "t_end": 1830
+    },
+    {
+      "block_id": "conv1",
+      "tier": "SSD_ACTIVE",
+      "t_start": 1500,
+      "t_end": 2100
+    },
+    {
+      "block_id": "conv2",
+      "tier": "RAM",
+      "t_start": 1230,
+      "t_end": 2100
+    },
+    {
+      "block_id": "conv1",
+      "tier": "HBM",
+      "t_start": 2100,
+      "t_end": 2130
+    },
+    {
+      "block_id": "conv0",
+      "tier": "RAM",
+      "t_start": 1530,
+      "t_end": 2400
+    },
+    {
+      "block_id": "conv4",
+      "tier": "HBM",
+      "t_start": 0.0,
+      "t_end": 2430
+    },
+    {
+      "block_id": "conv2",
+      "tier": "SSD_ACTIVE",
+      "t_start": 2100,
+      "t_end": 2700
+    },
+    {
+      "block_id": "conv3",
+      "tier": "RAM",
+      "t_start": 1830,
+      "t_end": 2700
+    },
+    {
+      "block_id": "conv2",
+      "tier": "HBM",
+      "t_start": 2700,
+      "t_end": 2730
+    },
+    {
+      "block_id": "conv1",
+      "tier": "RAM",
+      "t_start": 2130,
+      "t_end": 3000
+    },
+    {
+      "block_id": "conv5",
+      "tier": "HBM",
+      "t_start": 0.0,
+      "t_end": 3030
+    },
+    {
+      "block_id": "conv3",
+      "tier": "SSD_ACTIVE",
+      "t_start": 2700,
+      "t_end": 3300
+    },
+    {
+      "block_id": "conv4",
+      "tier": "RAM",
+      "t_start": 2430,
+      "t_end": 3300
+    },
+    {
+      "block_id": "conv3",
+      "tier": "HBM",
+      "t_start": 3300,
+      "t_end": 3330
+    },
+    {
+      "block_id": "conv2",
+      "tier": "RAM",
+      "t_start": 2730,
+      "t_end": 3600
+    },
+    {
+      "block_id": "conv6",
+      "tier": "HBM",
+      "t_start": 0.0,
+      "t_end": 3630
+    },
+    {
+      "block_id": "conv4",
+      "tier": "SSD_ACTIVE",
+      "t_start": 3300,
+      "t_end": 3900
+    },
+    {
+      "block_id": "conv5",
+      "tier": "RAM",
+      "t_start": 3030,
+      "t_end": 3900
+    },
+    {
+      "block_id": "conv4",
+      "tier": "HBM",
+      "t_start": 3900,
+      "t_end": 3930
+    },
+    {
+      "block_id": "conv3",
+      "tier": "RAM",
+      "t_start": 3330,
+      "t_end": 4200
+    },
+    {
+      "block_id": "conv7",
+      "tier": "HBM",
+      "t_start": 0.0,
+      "t_end": 4230
+    },
+    {
+      "block_id": "conv5",
+      "tier": "SSD_ACTIVE",
+      "t_start": 3900,
+      "t_end": 4500
+    },
+    {
+      "block_id": "conv6",
+      "tier": "RAM",
+      "t_start": 3630,
+      "t_end": 4500
+    },
+    {
+      "block_id": "conv5",
+      "tier": "HBM",
+      "t_start": 4500,
+      "t_end": 4530
+    },
+    {
+      "block_id": "conv4",
+      "tier": "RAM",
+      "t_start": 3930,
+      "t_end": 4800
+    },
+    {
+      "block_id": "conv6",
+      "tier": "SSD_ACTIVE",
+      "t_start": 4500,
+      "t_end": 5100
+    },
+    {
+      "block_id": "conv7",
+      "tier": "RAM",
+      "t_start": 4230,
+      "t_end": 5100
+    },
+    {
+      "block_id": "conv6",
+      "tier": "HBM",
+      "t_start": 5100,
+      "t_end": 5130
+    },
+    {
+      "block_id": "conv5",
+      "tier": "RAM",
+      "t_start": 4530,
+      "t_end": 5400
+    },
+    {
+      "block_id": "conv7",
+      "tier": "SSD_ACTIVE",
+      "t_start": 5100,
+      "t_end": 5700
+    },
+    {
+      "block_id": "conv7",
+      "tier": "HBM",
+      "t_start": 5700,
+      "t_end": 5730
+    },
+    {
+      "block_id": "conv6",
+      "tier": "RAM",
+      "t_start": 5130,
+      "t_end": 6000
+    },
+    {
+      "block_id": "conv7",
+      "tier": "RAM",
+      "t_start": 5730,
+      "t_end": 6600
+    },
+    {
+      "block_id": "conv0",
+      "tier": "SSD_ACTIVE",
+      "t_start": 2400,
+      "t_end": 8700
+    },
+    {
+      "block_id": "conv0",
+      "tier": "SSD_ARCHIVE",
+      "t_start": 8700,
+      "t_end": 9000
+    },
+    {
+      "block_id": "conv1",
+      "tier": "SSD_ACTIVE",
+      "t_start": 3000,
+      "t_end": 9000
+    },
+    {
+      "block_id": "conv2",
+      "tier": "SSD_ACTIVE",
+      "t_start": 3600,
+      "t_end": 9000
+    },
+    {
+      "block_id": "conv3",
+      "tier": "SSD_ACTIVE",
+      "t_start": 4200,
+      "t_end": 9000
+    },
+    {
+      "block_id": "conv4",
+      "tier": "SSD_ACTIVE",
+      "t_start": 4800,
+      "t_end": 9000
+    },
+    {
+      "block_id": "conv5",
+      "tier": "SSD_ACTIVE",
+      "t_start": 5400,
+      "t_end": 9000
+    },
+    {
+      "block_id": "conv6",
+      "tier": "SSD_ACTIVE",
+      "t_start": 6000,
+      "t_end": 9000
+    },
+    {
+      "block_id": "conv7",
+      "tier": "SSD_ACTIVE",
+      "t_start": 6600,
+      "t_end": 9000
+    }
+  ],
+  "events": [
+    {
+      "t": 30,
+      "block_id": "conv0",
+      "from_tier": "HBM",
+      "to_tier": "RAM",
+      "move_latency_us": 128000.0,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 630,
+      "block_id": "conv1",
+      "from_tier": "HBM",
+      "to_tier": "RAM",
+      "move_latency_us": 128000.0,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 900,
+      "block_id": "conv0",
+      "from_tier": "RAM",
+      "to_tier": "SSD_ACTIVE",
+      "move_latency_us": 1523809.5238095238,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 1230,
+      "block_id": "conv2",
+      "from_tier": "HBM",
+      "to_tier": "RAM",
+      "move_latency_us": 128000.0,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 1500,
+      "block_id": "conv0",
+      "from_tier": "SSD_ACTIVE",
+      "to_tier": "HBM",
+      "move_latency_us": 1029408.4507042253,
+      "is_prefetch": true,
+      "n_hops": 2
+    },
+    {
+      "t": 1500,
+      "block_id": "conv1",
+      "from_tier": "RAM",
+      "to_tier": "SSD_ACTIVE",
+      "move_latency_us": 1523809.5238095238,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 1530,
+      "block_id": "conv0",
+      "from_tier": "HBM",
+      "to_tier": "RAM",
+      "move_latency_us": 128000.0,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 1830,
+      "block_id": "conv3",
+      "from_tier": "HBM",
+      "to_tier": "RAM",
+      "move_latency_us": 128000.0,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 2100,
+      "block_id": "conv1",
+      "from_tier": "SSD_ACTIVE",
+      "to_tier": "HBM",
+      "move_latency_us": 1029408.4507042253,
+      "is_prefetch": true,
+      "n_hops": 2
+    },
+    {
+      "t": 2100,
+      "block_id": "conv2",
+      "from_tier": "RAM",
+      "to_tier": "SSD_ACTIVE",
+      "move_latency_us": 1523809.5238095238,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 2130,
+      "block_id": "conv1",
+      "from_tier": "HBM",
+      "to_tier": "RAM",
+      "move_latency_us": 128000.0,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 2400,
+      "block_id": "conv0",
+      "from_tier": "RAM",
+      "to_tier": "SSD_ACTIVE",
+      "move_latency_us": 1523809.5238095238,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 2430,
+      "block_id": "conv4",
+      "from_tier": "HBM",
+      "to_tier": "RAM",
+      "move_latency_us": 128000.0,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 2700,
+      "block_id": "conv2",
+      "from_tier": "SSD_ACTIVE",
+      "to_tier": "HBM",
+      "move_latency_us": 1029408.4507042253,
+      "is_prefetch": true,
+      "n_hops": 2
+    },
+    {
+      "t": 2700,
+      "block_id": "conv3",
+      "from_tier": "RAM",
+      "to_tier": "SSD_ACTIVE",
+      "move_latency_us": 1523809.5238095238,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 2730,
+      "block_id": "conv2",
+      "from_tier": "HBM",
+      "to_tier": "RAM",
+      "move_latency_us": 128000.0,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 3000,
+      "block_id": "conv1",
+      "from_tier": "RAM",
+      "to_tier": "SSD_ACTIVE",
+      "move_latency_us": 1523809.5238095238,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 3030,
+      "block_id": "conv5",
+      "from_tier": "HBM",
+      "to_tier": "RAM",
+      "move_latency_us": 128000.0,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 3300,
+      "block_id": "conv3",
+      "from_tier": "SSD_ACTIVE",
+      "to_tier": "HBM",
+      "move_latency_us": 1029408.4507042253,
+      "is_prefetch": true,
+      "n_hops": 2
+    },
+    {
+      "t": 3300,
+      "block_id": "conv4",
+      "from_tier": "RAM",
+      "to_tier": "SSD_ACTIVE",
+      "move_latency_us": 1523809.5238095238,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 3330,
+      "block_id": "conv3",
+      "from_tier": "HBM",
+      "to_tier": "RAM",
+      "move_latency_us": 128000.0,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 3600,
+      "block_id": "conv2",
+      "from_tier": "RAM",
+      "to_tier": "SSD_ACTIVE",
+      "move_latency_us": 1523809.5238095238,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 3630,
+      "block_id": "conv6",
+      "from_tier": "HBM",
+      "to_tier": "RAM",
+      "move_latency_us": 128000.0,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 3900,
+      "block_id": "conv4",
+      "from_tier": "SSD_ACTIVE",
+      "to_tier": "HBM",
+      "move_latency_us": 1029408.4507042253,
+      "is_prefetch": true,
+      "n_hops": 2
+    },
+    {
+      "t": 3900,
+      "block_id": "conv5",
+      "from_tier": "RAM",
+      "to_tier": "SSD_ACTIVE",
+      "move_latency_us": 1523809.5238095238,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 3930,
+      "block_id": "conv4",
+      "from_tier": "HBM",
+      "to_tier": "RAM",
+      "move_latency_us": 128000.0,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 4200,
+      "block_id": "conv3",
+      "from_tier": "RAM",
+      "to_tier": "SSD_ACTIVE",
+      "move_latency_us": 1523809.5238095238,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 4230,
+      "block_id": "conv7",
+      "from_tier": "HBM",
+      "to_tier": "RAM",
+      "move_latency_us": 128000.0,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 4500,
+      "block_id": "conv5",
+      "from_tier": "SSD_ACTIVE",
+      "to_tier": "HBM",
+      "move_latency_us": 1029408.4507042253,
+      "is_prefetch": true,
+      "n_hops": 2
+    },
+    {
+      "t": 4500,
+      "block_id": "conv6",
+      "from_tier": "RAM",
+      "to_tier": "SSD_ACTIVE",
+      "move_latency_us": 1523809.5238095238,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 4530,
+      "block_id": "conv5",
+      "from_tier": "HBM",
+      "to_tier": "RAM",
+      "move_latency_us": 128000.0,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 4800,
+      "block_id": "conv4",
+      "from_tier": "RAM",
+      "to_tier": "SSD_ACTIVE",
+      "move_latency_us": 1523809.5238095238,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 5100,
+      "block_id": "conv6",
+      "from_tier": "SSD_ACTIVE",
+      "to_tier": "HBM",
+      "move_latency_us": 1029408.4507042253,
+      "is_prefetch": true,
+      "n_hops": 2
+    },
+    {
+      "t": 5100,
+      "block_id": "conv7",
+      "from_tier": "RAM",
+      "to_tier": "SSD_ACTIVE",
+      "move_latency_us": 1523809.5238095238,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 5130,
+      "block_id": "conv6",
+      "from_tier": "HBM",
+      "to_tier": "RAM",
+      "move_latency_us": 128000.0,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 5400,
+      "block_id": "conv5",
+      "from_tier": "RAM",
+      "to_tier": "SSD_ACTIVE",
+      "move_latency_us": 1523809.5238095238,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 5700,
+      "block_id": "conv7",
+      "from_tier": "SSD_ACTIVE",
+      "to_tier": "HBM",
+      "move_latency_us": 1029408.4507042253,
+      "is_prefetch": true,
+      "n_hops": 2
+    },
+    {
+      "t": 5730,
+      "block_id": "conv7",
+      "from_tier": "HBM",
+      "to_tier": "RAM",
+      "move_latency_us": 128000.0,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 6000,
+      "block_id": "conv6",
+      "from_tier": "RAM",
+      "to_tier": "SSD_ACTIVE",
+      "move_latency_us": 1523809.5238095238,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 6600,
+      "block_id": "conv7",
+      "from_tier": "RAM",
+      "to_tier": "SSD_ACTIVE",
+      "move_latency_us": 1523809.5238095238,
+      "is_prefetch": false,
+      "n_hops": 1
+    },
+    {
+      "t": 8700,
+      "block_id": "conv0",
+      "from_tier": "SSD_ACTIVE",
+      "to_tier": "SSD_ARCHIVE",
+      "move_latency_us": 13450428.058547363,
+      "is_prefetch": false,
+      "n_hops": 2
+    }
+  ],
+  "limitations": [
+    "Phase 2.2 Loop1: move_latency_us recorded but does NOT advance simulation clock - PCIe/SSD queueing NOT modeled",
+    "Each transition treated as instantaneous at tick boundary (max <30s jitter from tick=30s)",
+    "Block size = 6.4 GB (1 conv at 32K tokens, V-only NF4). PDF Page 7 / 49 GB peak match",
+    "Synthetic uniform pattern (Phase 2a) - WildChat-sampled distribution = Phase 2b upgrade"
+  ],
+  "data_provenance": {
+    "ssd_active_profile": "Solidigm D7-P5520 (verified 2026-05-13)",
+    "ssd_archive_profile": "Solidigm D5-P5316 (verified 2026-05-13)",
+    "threshold_evidence_base": "WildChat-1M 200K conversations (measured 2026-05-13, P50 inter-conv idle = 15min 37s)"
+  }
+}
