@@ -87,3 +87,36 @@ H100 Idle-Driven Benchmark, 2026-05-13 1일 작업.
     cb1192a feat(phase1): SSD profiles + measurement-based threshold config
 
 Total: 9 commits, 1 fixup, 2 tags. ~1,373 LOC + JSON.
+
+---
+
+## Phase 3 Plan Redefinition (2026-05-14, anchor v1.4)
+
+**v1.4 Notion ledger**: <https://www.notion.so/360c78cb12ce81ef8461cc0481270d83>
+
+### Critical findings (3.1c + 3.1d-recon)
+
+1. `attention_patch.py` 9-6b = CCP hook, NOT V-only quant hook (anchor § 11 echo chamber)
+2. V-only quant code is in 0 of 5 aprilrushh repos
+3. PDF Page 4 V-only quant origin = Lambda Labs GH200 + llama.cpp ad-hoc measurement
+   (2026-04-15, ~$3.50 / 1.5h, instance terminated, code not asset-ized)
+
+### Phase 3 = dual evidence (NOT Lambda reproduce)
+
+- Lambda Labs Blue Intelligence (2026-04-15) = V-only quant theory verified
+- UmpaRumpa H100 (Phase 3, 2026-05-14+) = idle-driven scheduling production-grade code
+- Two together = anchor § 13 anchor 4: "place-past-name 숨기지 않는 dual evidence"
+
+### M1-M4 new scope
+
+| M | Phase 3 scope | V-only needed |
+|---|---|---|
+| M1 Decode SSD I/O trace | NF4 + idle scheduler + Sherlock | No, essential |
+| M2 Idle Gantt 4 conv x 32K | NF4 baseline | Partial, scope-reduced |
+| M3 Typing prefetch latency | 1 conv NF4 + UI signal | No, essential |
+| M4 49 GB peak reproduce | Lambda asset OR reimplement (deferred) | Yes, DEFERRED |
+
+### Company brand
+
+UmpaRumpa (single brand, external). Blue Intelligence = historical origin (Andy ownership).
+xhbm-bench README update needed: "Part of UmpaRumpa's XHBM program (originated as Blue Intelligence)".
