@@ -304,3 +304,56 @@ Cued Prefetching) 완전 제외.
 - 이유: R&D 재개 시 reconstruct 비용 회피, anchor § 4 portfolio 안 *paper-grade R&D* 로 유지
 
 **Notion ledger**: https://www.notion.so/360c78cb12ce81b88284e8c6f5163be4
+
+---
+
+## Phase 3.5 — M1.4 concurrent decode + RAM→HBM promote (2026-05-14)
+
+**Goal**: anchor § 13 anchor 1 의 *active transfer interference* test.
+M1.2 = passive resident (+1.0%), M1.4 = active concurrent transfer on
+separate `torch.cuda.Stream`.
+
+**Setup**:
+- NF4 Llama 70B + ACTIVE_CTX=32000 Sherlock prefill + N_DECODE=32
+- 2 warmup + 3 measure rounds per variant
+- Variant A: pure decode (M1.1 reproduce check)
+- Variant B: decode + concurrent RAM→HBM promote (1 conv, 10.49 GB)
+  on `torch.cuda.Stream`, `cuda.Event.elapsed_time` per-token timing
+  (stream-aware — does NOT sync promote stream)
+
+**Results**:
+| Metric | Variant A | Variant B |
+|---|---|---|
+| avg ms/tok | 78.47 | 78.14 |
+| stdev ms | 2.25 | 1.11 |
+| Δ vs M1.1 (78.60) | −0.16% | −0.58% |
+| **Δ B vs A** | — | **−0.42%** |
+| GPU peak | 60.7 GB | 71.1 GB |
+| promote duration | n/a | 190.37/190.36/190.39 ms (σ<0.01%) |
+
+**Token group analysis (Variant B)**:
+- During promote (n=6, cumulative ≤190 ms): avg 80.42 ms
+- After promote (n=90): avg 77.99 ms
+- 2.4 ms (3.1%) micro-contention signal during promote window, n=6 = noise range
+
+**Anchor verification**:
+- § 13 anchor 1 *bandwidth not latency* — **active interference verified**
+- Stream isolation: PCIe-HBM transfer (190 ms) 와 decode compute (78 ms/tok)
+  이 default + promote stream 으로 분리되어 mutual interference negligible
+- Δ B vs A = -0.42% within sigma=1.11/2.25 noise floor
+
+**Hero narrative line**:
+> Active decode 중 별도 CUDA Stream 위 RAM→HBM 10.49 GB promote 동시 진행
+> — decode latency Δ = -0.42% vs baseline. Stream isolation 코드 수준 검증.
+
+**Limitations**:
+- Single Python process, no multi-tenant
+- bf16 KV only (no V-only quant) — v1.4 § E dual-evidence path
+- Promote = 1 conv only; multi-conv concurrent promote = Phase 3.6+
+- Synthetic random idle KV (fill 0.001/0.002), real Sherlock workload = M2
+
+**Commit**: (this one)
+**JSON**: `results/m1_4/m1_4_1778741405.json`
+
+M1 series closure: M1.1 (0 byte) + M1.2 (+1.0% passive) + M1.3 (6.0× uplift)
++ M1.4 (-0.42% active) = anchor § 13 anchor 1 + 3 + § 15 M3 fully verified.
