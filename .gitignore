@@ -25,3 +25,4 @@ __pycache__/
 # Runtime artifacts (kept small for commits, but exclude transient debug)
 *.log
 .ipynb_checkpoints/
+data/
