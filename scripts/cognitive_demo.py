@@ -1,3 +1,19 @@
+# ============================================================================
+# DEPRECATED for Phase 3 / Solidigm narrative (anchor v1.6, 2026-05-14)
+#
+# This script demonstrates CCP (Cognitive Cued Prefetching) FULL vs SPARSE
+# attention. CCP was excluded from Phase 3 / Solidigm visit material /
+# FMS 2026 paper based on anchor § 4 measurements (4/5 stage slower, GPU
+# Hopfield retrieval cost). Andy directly confirmed 2026-05-14:
+#   "CCP 는 GPU 에 부담을 주어서 더 느려졌으므로 포함 안 한다"
+#
+# Code preserved as historical R&D asset; do NOT use in current narrative.
+# References:
+#   anchor v1.6: https://www.notion.so/360c78cb12ce81b88284e8c6f5163be4
+#   anchor v1.5: https://www.notion.so/360c78cb12ce813e8f37fdb944fce3c3
+#   anchor § 4 (5-stage measurement table)
+# ============================================================================
+
 """cognitive_demo.py - Production demo for Cognitive Cued Prefetching v2.
 
 A single-command CLI that compares full attention (baseline) against

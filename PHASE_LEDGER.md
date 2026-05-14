@@ -269,3 +269,38 @@ PDF Page 14 (Lambda llama.cpp 2026-04-15) + M1.3 (H100 transformers 2026-05-14)
 2. Anchor § 13 anchor 3 (HBM 49 + RAM 75 dual): **system-level reconciled** (M1.2)
 3. Anchor § 15 M3 (typing prefetch ≈ 0 user latency): **6.0× faster than PDF claim** (M1.3)
 4. New 5th anchor candidate: "H100 stack 6× uplift over Lambda Labs (systematically explainable)"
+
+---
+
+## Anchor v1.6: CCP Scope Exclusion (2026-05-14)
+
+**Decision**: Phase 3 / Solidigm 방문 자료 / FMS 2026 paper 에서 CCP (Cognitive
+Cued Prefetching) 완전 제외.
+
+**Andy 직접 짚음 (2026-05-14, M1.3 + v1.5 박은 직후)**:
+> "CCP 는 우리가 테스트 해보니까 도리어 GPU 에 이것 계산하느라 부담을 주어서
+> GPU 가 더 느려졌으므로 이건 포함 안 하는 것이 좋을 것 같다"
+
+**근거**: anchor § 4 의 5-stage 측정 (Llama 3.1 70B, H100)
+- 4K m8 β=3: +22.2% slower
+- 8K m8 β=3: +33.7% slower
+- 16K m8 β=3: +36.9% slower
+- 24K m32 β=3: +84.1% slower
+- 32K m8 β=3: +14.2% slower
+- 32K m32 β=3: −46.2% faster (EOT self-termination root cause)
+- 32K m32 β=2: +85.8% slower
+- → 5/7 stage slower, GPU Hopfield retrieval cost 추가 부담
+
+**Scope**:
+- Phase 3 측정 (M1.1-M1.4, M2, M3, M4): CCP attention hook 포함 안 함
+- Solidigm 1-page PDF, 방문 자료: CCP 언급 안 함
+- 답변서 v3.1 § 5.X: V-only quant + idle-driven scheduling 만
+- FMS 2026 paper draft: CCP 제외
+
+**예외**: 코드 자산은 보존 (deprecate 표시만 추가)
+- `src/attention_patch.py`, `src/cognitive_cache_v2.py`, `src/beta_scheduler.py`,
+  `src/predictor.py`, `src/hopfield.py`, `src/retrieval_logger.py`,
+  `src/cognitive_cache.py`, `scripts/cognitive_demo.py`, `README_DEMO.md`
+- 이유: R&D 재개 시 reconstruct 비용 회피, anchor § 4 portfolio 안 *paper-grade R&D* 로 유지
+
+**Notion ledger**: https://www.notion.so/360c78cb12ce81b88284e8c6f5163be4

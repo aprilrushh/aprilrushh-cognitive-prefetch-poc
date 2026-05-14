@@ -1,3 +1,22 @@
+> ⚠️ **STATUS UPDATE (2026-05-14, anchor v1.6)**
+>
+> 이 demo 는 CCP (Cognitive Cued Prefetching) prototype 의 historical record 입니다.
+> CCP 는 anchor § 4 의 5-stage 측정 결과 (4/5 stage slower, GPU Hopfield retrieval cost 추가)
+> 에 따라 **Phase 3 / Solidigm 방문 자료 / FMS 2026 paper 에서 제외** 됩니다.
+>
+> 이유: Andy 직접 짚음 (2026-05-14):
+> > "CCP 는 우리가 테스트 해보니까 도리어 GPU 에 이것 계산하느라 부담을 주어서
+> > GPU 가 더 느려졌으므로 이건 포함 안 하는 것이 좋을 것 같다"
+>
+> Phase 3 main measurement asset = M1.1-M1.4 (NF4 + idle-driven scheduling).
+> Anchor v1.5 / v1.6 참조:
+> - v1.6: https://www.notion.so/360c78cb12ce81b88284e8c6f5163be4
+> - v1.5: https://www.notion.so/360c78cb12ce813e8f37fdb944fce3c3
+>
+> 코드 자산은 보존 (historical reference). 외부 communication 에서만 제외.
+
+---
+
 # Cognitive Cued Prefetching v2 — Reproducibility Demo
 
 **For**: Solidigm AI Technologist & Engineering Team
