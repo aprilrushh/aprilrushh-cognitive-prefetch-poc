@@ -16,6 +16,9 @@ Lifecycle per layer N:
 
 from __future__ import annotations
 import torch
+import sys, os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from src.nixl_plugin_manager import NixlSolidigmPlugin
 from typing import Optional, Tuple, List, Dict, Any
 from transformers.cache_utils import DynamicCache
 
@@ -215,3 +218,15 @@ if __name__ == "__main__":
         print("subset indices:", subset["indices"].tolist())
     print(cache)
     print("Done")
+
+
+    def __del__(self):
+        try:
+            m = self.nixl_plugin.get_metrics()
+            if m['total_original_bytes'] > 0:
+                print(f"\n[NIXL Backend Metric] Intercepted {m['intercept_calls']} calls")
+                print(f"[NIXL Backend Metric] Total Original: {m['total_original_bytes']} bytes")
+                print(f"[NIXL Backend Metric] Total Compressed: {m['total_compressed_bytes']} bytes")
+                print(f"[NIXL Backend Metric] PCIe BW Saved (Est): {(1 - m['total_compressed_bytes']/m['total_original_bytes'])*100:.1f}%")
+        except:
+            pass
