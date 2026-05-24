@@ -57,9 +57,6 @@ class CognitiveCache_v2(DynamicCache):
         self.offload_dtype = offload_dtype
         self.enable_async = enable_async
 
-        # [NIXL Plugin] 통합 관제탑 인스턴스화 (Fire-and-Forget Pipeline)
-        self.nixl_plugin = NixlSolidigmPlugin(num_workers=4)
-
         self._cpu_K: List[Optional[torch.Tensor]] = [None] * num_layers
         self._cpu_V: List[Optional[torch.Tensor]] = [None] * num_layers
         self._gpu_subset: List[Optional[Dict[str, torch.Tensor]]] = [None] * num_layers
@@ -100,11 +97,6 @@ class CognitiveCache_v2(DynamicCache):
         else:
             self._cpu_K[layer_idx] = torch.cat([self._cpu_K[layer_idx], new_K_cpu], dim=2)
             self._cpu_V[layer_idx] = torch.cat([self._cpu_V[layer_idx], new_V_cpu], dim=2)
-
-        # --- NIXL Solidigm Tunnel (Fire-and-Forget) ---
-        self.nixl_plugin.process_layer_offload(layer_idx, key_states, value_states)
-        # ----------------------------------------------
-
         return super().update(key_states, value_states, layer_idx, cache_kwargs)
 
     # ----- load path -----
@@ -226,3 +218,15 @@ if __name__ == "__main__":
         print("subset indices:", subset["indices"].tolist())
     print(cache)
     print("Done")
+
+
+    def __del__(self):
+        try:
+            m = self.nixl_plugin.get_metrics()
+            if m['total_original_bytes'] > 0:
+                print(f"\n[NIXL Backend Metric] Intercepted {m['intercept_calls']} calls")
+                print(f"[NIXL Backend Metric] Total Original: {m['total_original_bytes']} bytes")
+                print(f"[NIXL Backend Metric] Total Compressed: {m['total_compressed_bytes']} bytes")
+                print(f"[NIXL Backend Metric] PCIe BW Saved (Est): {(1 - m['total_compressed_bytes']/m['total_original_bytes'])*100:.1f}%")
+        except:
+            pass

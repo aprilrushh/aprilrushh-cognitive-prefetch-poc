@@ -1,3 +1,4 @@
+import torch
 import zlib
 import time
 import concurrent.futures
@@ -49,8 +50,14 @@ class NixlAsyncCodec:
         # 텐서 내부의 메모리 포인터(DataPtr)를 직접 읽어 순수 bytes 객체로 변환
         # (이 과정은 매우 빠릅니다)
         # PoC에서는 메모리 안전을 위해 numpy를 거쳐 bytes로 변환합니다.
-        k_bytes = k_flat_tensor.detach().cpu().numpy().tobytes()
-        v_bytes = v_flat_tensor.detach().cpu().numpy().tobytes()
+        # bf16/numpy 미지원 회피: float16으로 view (압축 byte stream만 사용, dtype 무관)
+        k_t = k_flat_tensor.detach()
+        v_t = v_flat_tensor.detach()
+        if k_t.dtype == torch.bfloat16:
+            k_t = k_t.view(torch.float16)
+            v_t = v_t.view(torch.float16)
+        k_bytes = k_t.cpu().numpy().tobytes()
+        v_bytes = v_t.cpu().numpy().tobytes()
         
         # 백그라운드 워커에 압축 작업 던지기
         future = self._executor.submit(self._compress_worker, layer_idx, k_bytes, v_bytes)

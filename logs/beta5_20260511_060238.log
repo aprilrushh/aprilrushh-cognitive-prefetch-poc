@@ -1,0 +1,85 @@
+===== β=5 phase transition sweep (Angle B-1 + β=5) =====
+Hypothesis (anchor § 3): β=5 → union 0.82% mock, 0.98 top1
+Started: Mon May 11 06:02:38 UTC 2026
+
+----- STAGE: 4096 context -----
+[3/4] Round FULL    (baseline, full attention)
+   [D2] calls=0  fallbacks=0  lengths[0:3]=[0, 0, 0]  layer0.keys=(1, 8, 4101, 128)
+   GPU peak:   46.91 GB
+[4/4] Round SPARSE  (cognitive prefetch)
+   [D2] calls=480  fallbacks=85  lengths[0:3]=[4101, 4101, 4101]  layer0.keys=(1, 8, 1, 128)
+   GPU peak:   45.45 GB
+   Greedy match:           6/6 (100.0%)  [bit-equivalent]
+   Full text:              ' The Modern Hopfield Network,'
+   Sparse text:            ' The Modern Hopfield Network,'
+   PCIe save (estimate):       18.63%
+   PCIe save (measured ideal): 18.67%  (subset / K_full)
+   Union mean:                 3333 / 4096 tokens (81.4% of prefill)
+   Full time:    2.27s    GPU peak: 46.91 GB
+   Sparse time:  2.50s    GPU peak: 45.45 GB
+   Verdict:                Gate 4 PASS  (>= 98% top-1 match)
+   1. PCIe save is a mathematical estimate (subset bytes / full
+      mode yielding true measured ~64% PCIe save is the 9-6d follow-
+   3. PCIe save at 32K context is 58.75% (slightly below the 60%
+
+----- STAGE: 8192 context -----
+[3/4] Round FULL    (baseline, full attention)
+   [D2] calls=0  fallbacks=0  lengths[0:3]=[0, 0, 0]  layer0.keys=(1, 8, 8197, 128)
+   GPU peak:   47.38 GB
+[4/4] Round SPARSE  (cognitive prefetch)
+   [D2] calls=480  fallbacks=85  lengths[0:3]=[8197, 8197, 8197]  layer0.keys=(1, 8, 1, 128)
+   GPU peak:   48.12 GB
+   Greedy match:           1/6 (16.7%)
+   Full text:              ' The Modern Hopfield Network,'
+   Sparse text:            ' TheThe Modern Hopfield Network'
+   PCIe save (estimate):       -0.02%
+   PCIe save (measured ideal): 0.00%  (subset / K_full)
+   Union mean:                 8194 / 8192 tokens (100.0% of prefill)
+   Full time:    3.75s    GPU peak: 47.38 GB
+   Sparse time:  4.57s    GPU peak: 48.12 GB
+   Verdict:                WEAK - hypothesis revision
+   1. PCIe save is a mathematical estimate (subset bytes / full
+      mode yielding true measured ~64% PCIe save is the 9-6d follow-
+   3. PCIe save at 32K context is 58.75% (slightly below the 60%
+
+----- STAGE: 16384 context -----
+[3/4] Round FULL    (baseline, full attention)
+   [D2] calls=0  fallbacks=0  lengths[0:3]=[0, 0, 0]  layer0.keys=(1, 8, 16389, 128)
+   GPU peak:   52.01 GB
+[4/4] Round SPARSE  (cognitive prefetch)
+   [D2] calls=480  fallbacks=85  lengths[0:3]=[16389, 16389, 16389]  layer0.keys=(1, 8, 1, 128)
+   GPU peak:   53.46 GB
+   Greedy match:           3/6 (50.0%)
+   Full text:              'field Network, introduced by Rams'
+   Sparse text:            'field Network, theThe Modern'
+   PCIe save (estimate):       19.66%
+   PCIe save (measured ideal): 19.67%  (subset / K_full)
+   Union mean:                 13164 / 16384 tokens (80.3% of prefill)
+   Full time:    8.04s    GPU peak: 52.01 GB
+   Sparse time:  10.15s    GPU peak: 53.46 GB
+   Verdict:                PARTIAL - beta sweep recommended
+   1. PCIe save is a mathematical estimate (subset bytes / full
+      mode yielding true measured ~64% PCIe save is the 9-6d follow-
+   3. PCIe save at 32K context is 58.75% (slightly below the 60%
+
+----- STAGE: 32768 context -----
+[3/4] Round FULL    (baseline, full attention)
+   [D2] calls=0  fallbacks=0  lengths[0:3]=[0, 0, 0]  layer0.keys=(1, 8, 32773, 128)
+   GPU peak:   61.28 GB
+[4/4] Round SPARSE  (cognitive prefetch)
+   [D2] calls=480  fallbacks=85  lengths[0:3]=[32773, 32773, 32773]  layer0.keys=(1, 8, 1, 128)
+   GPU peak:   64.14 GB
+   Greedy match:           5/6 (83.3%)
+   Full text:              ' by Ramsauer et al.'
+   Sparse text:            ' by Ramsauer et al.,'
+   PCIe save (estimate):       -0.01%
+   PCIe save (measured ideal): 0.00%  (subset / K_full)
+   Union mean:                 32770 / 32768 tokens (100.0% of prefill)
+   Full time:    17.37s    GPU peak: 61.28 GB
+   Sparse time:  21.84s    GPU peak: 64.14 GB
+   Verdict:                PARTIAL - beta sweep recommended
+   1. PCIe save is a mathematical estimate (subset bytes / full
+      mode yielding true measured ~64% PCIe save is the 9-6d follow-
+   3. PCIe save at 32K context is 58.75% (slightly below the 60%
+
+Completed: Mon May 11 06:06:53 UTC 2026

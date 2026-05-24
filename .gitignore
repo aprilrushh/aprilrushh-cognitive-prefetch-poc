@@ -17,12 +17,14 @@ __pycache__/
 *secret*
 *.key
 
-# Large model caches (lives in ~/.cache/huggingface/, not in repo, but enforce)
+# Large model weights (re-downloadable from HuggingFace, not for repo backup)
+# To restore: huggingface-cli download meta-llama/Llama-3.1-70B (or similar)
 *.safetensors
 *.bin
 *.gguf
 
-# Runtime artifacts (kept small for commits, but exclude transient debug)
-*.log
+# Jupyter
 .ipynb_checkpoints/
-data/
+
+# Unrelated files
+world-aging.pdf

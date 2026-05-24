@@ -1,0 +1,194 @@
+===== 9-6d Phase B3 re-measurement (per-layer prefill evict) =====
+Started: Sun May 10 01:00:13 UTC 2026
+81090 MiB
+58d3686 feat: README_DEMO.md production demo guide for Solidigm engineers (234 lines, 9 sections)
+
+----- STAGE: 4096 context -----
+
+========================================================================
+  COMPARISON
+========================================================================
+   Greedy match:           6/6 (100.0%)  [bit-equivalent]
+   Full text:              ' The Modern Hopfield Network,'
+   Sparse text:            ' The Modern Hopfield Network,'
+
+   PCIe save (estimate):       63.42%
+   PCIe save (measured ideal): 63.44%  (subset / K_full)
+   Estimate vs measured:       0.02pp difference
+   Union mean:                 1498 / 4096 tokens (36.6% of prefill)
+
+   Full time:    5.87s    GPU peak: 46.91 GB
+   Sparse time:  5.18s    GPU peak: 45.33 GB
+
+   Verdict:                Gate 4 PASS  (>= 98% top-1 match)
+
+========================================================================
+  HONEST LIMITATIONS  (always disclosed, in v3.0 spirit)
+========================================================================
+   1. PCIe save is a mathematical estimate (subset bytes / full
+      bytes), shown above to agree with measured ideal save
+      typically within 0.01pp. Direct nvidia-smi dmon measurement is
+      the natural next step under v3.0 Section 6 Path 6 (DC Joint
+      Validation).
+
+   2. The current prototype operates in K_full GPU staging mode
+      (mechanism validation prioritized). The real K_subset-only
+      mode yielding true measured ~64% PCIe save is the 9-6d follow-
+      up.
+
+   3. PCIe save at 32K context is 58.75% (slightly below the 60%
+      bar). Reaching the 80% theoretical requires top_k reduction
+      and increased KV-head independence (planned).
+
+   4. HBM save figures (30-75% range) are mathematical projections.
+      Measured combined HBM save under simultaneous V-only
+      quantization + cognitive prefetch requires 9-6d implementation
+      followed by joint validation per v3.0 Section 6 Path 6.
+
+========================================================================
+
+  See README_DEMO.md for environment requirements and reproducibility.
+
+
+----- STAGE: 8192 context -----
+
+========================================================================
+  COMPARISON
+========================================================================
+   Greedy match:           6/6 (100.0%)  [bit-equivalent]
+   Full text:              ' The Modern Hopfield Network,'
+   Sparse text:            ' The Modern Hopfield Network,'
+
+   PCIe save (estimate):       64.40%
+   PCIe save (measured ideal): 64.41%  (subset / K_full)
+   Estimate vs measured:       0.01pp difference
+   Union mean:                 2916 / 8192 tokens (35.6% of prefill)
+
+   Full time:    7.96s    GPU peak: 47.38 GB
+   Sparse time:  7.38s    GPU peak: 47.41 GB
+
+   Verdict:                Gate 4 PASS  (>= 98% top-1 match)
+
+========================================================================
+  HONEST LIMITATIONS  (always disclosed, in v3.0 spirit)
+========================================================================
+   1. PCIe save is a mathematical estimate (subset bytes / full
+      bytes), shown above to agree with measured ideal save
+      typically within 0.01pp. Direct nvidia-smi dmon measurement is
+      the natural next step under v3.0 Section 6 Path 6 (DC Joint
+      Validation).
+
+   2. The current prototype operates in K_full GPU staging mode
+      (mechanism validation prioritized). The real K_subset-only
+      mode yielding true measured ~64% PCIe save is the 9-6d follow-
+      up.
+
+   3. PCIe save at 32K context is 58.75% (slightly below the 60%
+      bar). Reaching the 80% theoretical requires top_k reduction
+      and increased KV-head independence (planned).
+
+   4. HBM save figures (30-75% range) are mathematical projections.
+      Measured combined HBM save under simultaneous V-only
+      quantization + cognitive prefetch requires 9-6d implementation
+      followed by joint validation per v3.0 Section 6 Path 6.
+
+========================================================================
+
+  See README_DEMO.md for environment requirements and reproducibility.
+
+
+----- STAGE: 16384 context -----
+
+========================================================================
+  COMPARISON
+========================================================================
+   Greedy match:           6/6 (100.0%)  [bit-equivalent]
+   Full text:              'field Network, introduced by Rams'
+   Sparse text:            'field Network, introduced by Rams'
+
+   PCIe save (estimate):       60.01%
+   PCIe save (measured ideal): 60.02%  (subset / K_full)
+   Estimate vs measured:       0.00pp difference
+   Union mean:                 6552 / 16384 tokens (40.0% of prefill)
+
+   Full time:    13.81s    GPU peak: 52.01 GB
+   Sparse time:  13.18s    GPU peak: 52.05 GB
+
+   Verdict:                Gate 4 PASS  (>= 98% top-1 match)
+
+========================================================================
+  HONEST LIMITATIONS  (always disclosed, in v3.0 spirit)
+========================================================================
+   1. PCIe save is a mathematical estimate (subset bytes / full
+      bytes), shown above to agree with measured ideal save
+      typically within 0.01pp. Direct nvidia-smi dmon measurement is
+      the natural next step under v3.0 Section 6 Path 6 (DC Joint
+      Validation).
+
+   2. The current prototype operates in K_full GPU staging mode
+      (mechanism validation prioritized). The real K_subset-only
+      mode yielding true measured ~64% PCIe save is the 9-6d follow-
+      up.
+
+   3. PCIe save at 32K context is 58.75% (slightly below the 60%
+      bar). Reaching the 80% theoretical requires top_k reduction
+      and increased KV-head independence (planned).
+
+   4. HBM save figures (30-75% range) are mathematical projections.
+      Measured combined HBM save under simultaneous V-only
+      quantization + cognitive prefetch requires 9-6d implementation
+      followed by joint validation per v3.0 Section 6 Path 6.
+
+========================================================================
+
+  See README_DEMO.md for environment requirements and reproducibility.
+
+
+----- STAGE: 32768 context -----
+
+========================================================================
+  COMPARISON
+========================================================================
+   Greedy match:           6/6 (100.0%)  [bit-equivalent]
+   Full text:              ' by Ramsauer et al.'
+   Sparse text:            ' by Ramsauer et al.'
+
+   PCIe save (estimate):       58.75%
+   PCIe save (measured ideal): 58.76%  (subset / K_full)
+   Estimate vs measured:       0.00pp difference
+   Union mean:                 13516 / 32768 tokens (41.2% of prefill)
+
+   Full time:    25.65s    GPU peak: 61.28 GB
+   Sparse time:  25.04s    GPU peak: 61.32 GB
+
+   Verdict:                Gate 4 PASS  (>= 98% top-1 match)
+
+========================================================================
+  HONEST LIMITATIONS  (always disclosed, in v3.0 spirit)
+========================================================================
+   1. PCIe save is a mathematical estimate (subset bytes / full
+      bytes), shown above to agree with measured ideal save
+      typically within 0.01pp. Direct nvidia-smi dmon measurement is
+      the natural next step under v3.0 Section 6 Path 6 (DC Joint
+      Validation).
+
+   2. The current prototype operates in K_full GPU staging mode
+      (mechanism validation prioritized). The real K_subset-only
+      mode yielding true measured ~64% PCIe save is the 9-6d follow-
+      up.
+
+   3. PCIe save at 32K context is 58.75% (slightly below the 60%
+      bar). Reaching the 80% theoretical requires top_k reduction
+      and increased KV-head independence (planned).
+
+   4. HBM save figures (30-75% range) are mathematical projections.
+      Measured combined HBM save under simultaneous V-only
+      quantization + cognitive prefetch requires 9-6d implementation
+      followed by joint validation per v3.0 Section 6 Path 6.
+
+========================================================================
+
+  See README_DEMO.md for environment requirements and reproducibility.
+
+
+Completed: Sun May 10 01:05:05 UTC 2026

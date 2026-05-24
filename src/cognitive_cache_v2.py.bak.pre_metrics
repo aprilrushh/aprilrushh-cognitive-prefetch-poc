@@ -57,9 +57,6 @@ class CognitiveCache_v2(DynamicCache):
         self.offload_dtype = offload_dtype
         self.enable_async = enable_async
 
-        # [NIXL Plugin] 통합 관제탑 인스턴스화 (Fire-and-Forget Pipeline)
-        self.nixl_plugin = NixlSolidigmPlugin(num_workers=4)
-
         self._cpu_K: List[Optional[torch.Tensor]] = [None] * num_layers
         self._cpu_V: List[Optional[torch.Tensor]] = [None] * num_layers
         self._gpu_subset: List[Optional[Dict[str, torch.Tensor]]] = [None] * num_layers
@@ -100,11 +97,6 @@ class CognitiveCache_v2(DynamicCache):
         else:
             self._cpu_K[layer_idx] = torch.cat([self._cpu_K[layer_idx], new_K_cpu], dim=2)
             self._cpu_V[layer_idx] = torch.cat([self._cpu_V[layer_idx], new_V_cpu], dim=2)
-
-        # --- NIXL Solidigm Tunnel (Fire-and-Forget) ---
-        self.nixl_plugin.process_layer_offload(layer_idx, key_states, value_states)
-        # ----------------------------------------------
-
         return super().update(key_states, value_states, layer_idx, cache_kwargs)
 
     # ----- load path -----
@@ -155,9 +147,9 @@ class CognitiveCache_v2(DynamicCache):
         ctx = torch.cuda.stream(stream) if stream is not None else _NullCtx()
         try:
             with ctx:
-                K_full = self._cpu_K[next_layer_idx].to(self.device_target, non_blocking=True).to(torch.float16)
-                V_full = self._cpu_V[next_layer_idx].to(self.device_target, non_blocking=True).to(torch.float16)
-                self.stats["pcie_h2d_bytes"] += K_full.numel() * K_full.element_size() + V_full.numel() * V_full.element_size()
+                cpu_k = self._cpu_K[next_layer_idx]
+                cpu_v = self._cpu_V[next_layer_idx]
+                self.stats["pcie_h2d_bytes"] += cpu_k.numel() * K_full.element_size() + cpu_v.numel() * V_full.element_size()
                 result = self.predictor.predict(
                     current_q=current_q,
                     target_keys=K_full,
@@ -173,7 +165,7 @@ class CognitiveCache_v2(DynamicCache):
                 self.stats["indices_log"].append((next_layer_idx, int(indices.shape[1]), int(indices[0, -1].item())))
                 B, KVH, S, D = K_full.shape
                 U = indices.shape[1]
-                idx_exp = indices.view(B, 1, U, 1).expand(B, KVH, U, D).to(K_full.device)
+                idx_exp = indices.view(B, 1, U, 1).expand(B, KVH, U, D).to(cpu_k.device)
                 K_sub = torch.gather(K_full, 2, idx_exp).contiguous()
                 V_sub = torch.gather(V_full, 2, idx_exp).contiguous()
                 self.stats["pcie_subset_bytes"] += K_sub.numel() * K_sub.element_size() + V_sub.numel() * V_sub.element_size()
@@ -226,3 +218,15 @@ if __name__ == "__main__":
         print("subset indices:", subset["indices"].tolist())
     print(cache)
     print("Done")
+
+
+    def __del__(self):
+        try:
+            m = self.nixl_plugin.get_metrics()
+            if m['total_original_bytes'] > 0:
+                print(f"\n[NIXL Backend Metric] Intercepted {m['intercept_calls']} calls")
+                print(f"[NIXL Backend Metric] Total Original: {m['total_original_bytes']} bytes")
+                print(f"[NIXL Backend Metric] Total Compressed: {m['total_compressed_bytes']} bytes")
+                print(f"[NIXL Backend Metric] PCIe BW Saved (Est): {(1 - m['total_compressed_bytes']/m['total_original_bytes'])*100:.1f}%")
+        except:
+            pass

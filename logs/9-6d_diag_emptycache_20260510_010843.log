@@ -1,0 +1,31 @@
+===== DIAGNOSTIC: empty_cache after evict =====
+Started: Sun May 10 01:08:43 UTC 2026
+Hypothesis: GPU peak ↓ if PyTorch caching allocator was the blocker
+
+========================================================================
+   1. PCIe save is a mathematical estimate (subset bytes / full
+      bytes), shown above to agree with measured ideal save
+      typically within 0.01pp. Direct nvidia-smi dmon measurement is
+      the natural next step under v3.0 Section 6 Path 6 (DC Joint
+      Validation).
+
+   2. The current prototype operates in K_full GPU staging mode
+      (mechanism validation prioritized). The real K_subset-only
+      mode yielding true measured ~64% PCIe save is the 9-6d follow-
+      up.
+
+   3. PCIe save at 32K context is 58.75% (slightly below the 60%
+      bar). Reaching the 80% theoretical requires top_k reduction
+      and increased KV-head independence (planned).
+
+   4. HBM save figures (30-75% range) are mathematical projections.
+      Measured combined HBM save under simultaneous V-only
+      quantization + cognitive prefetch requires 9-6d implementation
+      followed by joint validation per v3.0 Section 6 Path 6.
+
+========================================================================
+
+  See README_DEMO.md for environment requirements and reproducibility.
+
+
+Completed: Sun May 10 01:09:31 UTC 2026
