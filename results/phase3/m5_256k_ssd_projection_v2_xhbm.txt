@@ -1,0 +1,40 @@
+==============================================================================
+M5 v2 — XHBM algorithm vs naive (measurement-grounded projection)
+==============================================================================
+naive KV/tok:   327680 B (0.328 MB) K+V bf16
+V-only KV/tok:  204800 B (0.205 MB) K bf16 + V 4bit
+  -> V-only reduction: 37.5%
+HBM KV budget:  128.4 GB
+decode base:    114.17 ms/tok | typing window: 15.0s
+
+--- 256K context (D7-P5520) ---
+  NAIVE (bf16, reread/tok) : KV=83.9GB offload=0.0GB -> 114.2 ms/tok (+0.0)
+  XHBM (V-only+idle-driven): KV=52.4GB offload=0.0GB
+     active decode: 114.2 ms/tok (SSD read ~0, KV in HBM)
+     reactivation: none (fits HBM with V-only quant)
+     -> active-decode speedup vs naive: 1.0x
+
+--- 512K context (D7-P5520) ---
+  NAIVE (bf16, reread/tok) : KV=167.8GB offload=39.4GB -> 5656.7 ms/tok (+5542.6)
+  XHBM (V-only+idle-driven): KV=104.9GB offload=0.0GB
+     active decode: 114.2 ms/tok (SSD read ~0, KV in HBM)
+     reactivation: none (fits HBM with V-only quant)
+     -> active-decode speedup vs naive: 49.5x
+
+--- 1000K context (D7-P5520) ---
+  NAIVE (bf16, reread/tok) : KV=327.7GB offload=199.3GB -> 28179.0 ms/tok (+28064.8)
+  XHBM (V-only+idle-driven): KV=204.8GB offload=76.4GB
+     active decode: 114.2 ms/tok (SSD read ~0, KV in HBM)
+     reactivation promote: 10758 ms one-time (HIDDEN in typing window)
+     -> active-decode speedup vs naive: 246.8x
+
+KEY INSIGHT:
+- Naive rereads SSD KV every token -> seconds/token (unusable).
+- XHBM keeps active KV in HBM; SSD only for idle conv. Active decode
+  stays at base latency. SSD promote is one-time, hidden in typing pause.
+- V-only quant shrinks KV so more context fits HBM before any offload.
+
+HONEST DISCLOSURE:
+- Amortization assumes promote overlaps typing window (deck v6.3 sec 5).
+- Emulator: throughput+PCIe+write-amp only. NOT queue/thermal/GC/FTL.
+- Real measurement = PoC stage with Solidigm hardware.
