@@ -1,0 +1,38 @@
+==============================================================================
+M5 — 256K+ SSD-offload projection (measurement-grounded, NOT real inference)
+==============================================================================
+per-token KV: 327680 B (0.328 MB)
+HBM KV budget: 128.4 GB (178 usable - 39.58 weights - 10.0 workspace)
+decode base latency (128K measured): 114.17 ms/tok
+
+--- 128K context ---
+  D7-P5520 (Active TLC)   : KV=41.9GB | HBM-alone fits
+                            decode 114.17 -> 114.17 ms/tok (+0.0 ms SSD)
+  D5-P5316 (Archive QLC)  : KV=41.9GB | HBM-alone fits
+                            decode 114.17 -> 114.17 ms/tok (+0.0 ms SSD)
+
+--- 256K context ---
+  D7-P5520 (Active TLC)   : KV=83.9GB | HBM-alone fits
+                            decode 114.17 -> 114.17 ms/tok (+0.0 ms SSD)
+  D5-P5316 (Archive QLC)  : KV=83.9GB | HBM-alone fits
+                            decode 114.17 -> 114.17 ms/tok (+0.0 ms SSD)
+
+--- 512K context ---
+  D7-P5520 (Active TLC)   : KV=167.8GB | SSD offload 39.35 GB
+                            decode 114.17 -> 5656.73 ms/tok (+5542.56 ms SSD)
+  D5-P5316 (Archive QLC)  : KV=167.8GB | SSD offload 39.35 GB
+                            decode 114.17 -> 5735.91 ms/tok (+5621.74 ms SSD)
+
+--- 1000K context ---
+  D7-P5520 (Active TLC)   : KV=327.7GB | SSD offload 199.26 GB
+                            decode 114.17 -> 28178.96 ms/tok (+28064.79 ms SSD)
+  D5-P5316 (Archive QLC)  : KV=327.7GB | SSD offload 199.26 GB
+                            decode 114.17 -> 28579.88 ms/tok (+28465.71 ms SSD)
+
+HONEST DISCLOSURE:
+- 256K KV alone (83.9 GB) + weights (39.6 GB) = 123.5 GB < 178 GB usable.
+  256K KV FITS in HBM. The 256K OOM was the LM head (65 GB single
+  tensor), fixable with num_logits_to_keep=1 -- NOT a KV problem.
+- SSD offload value appears at 512K+ where KV alone exceeds HBM budget.
+- Emulator: throughput + PCIe + write-amp only. NOT queue/thermal/GC/FTL.
+- Real measurement = PoC stage with Solidigm hardware.
