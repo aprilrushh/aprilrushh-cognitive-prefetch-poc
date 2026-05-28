@@ -1,0 +1,393 @@
+{
+  "measurement": "M1.1-256K -- Decode SSD I/O at 256000 context on B200",
+  "date": "2026-05-27",
+  "platform": "B200 SXM6 192GB sm_100",
+  "anchor_ref": "v1.0 section 15 M1, deck v6.3 section 9 (128K Blocked-by-H100 unblock)",
+  "spec": {
+    "model": "meta-llama/Llama-3.1-70B-Instruct",
+    "quant": "nf4 + bf16 compute_dtype + double_quant",
+    "context_tokens": 256000,
+    "n_decode_tokens": 32,
+    "workload": "Sherlock 4 volumes concatenated, first 128K tokens"
+  },
+  "load": {
+    "time_s": 243.8,
+    "gpu_gb": 123.45
+  },
+  "prefill": {
+    "time_s": 94.58,
+    "tokens_per_s": 2706.7,
+    "proc_read_bytes": 0,
+    "proc_read_count": 29,
+    "proc_write_bytes": 0,
+    "proc_write_count": 5
+  },
+  "decode": {
+    "n_tokens": 32,
+    "aggregate": {
+      "proc_rd_count": 480,
+      "proc_wr_count": 1,
+      "proc_rd_bytes": 0,
+      "proc_wr_bytes": 0,
+      "vda1_rd_bytes": 0,
+      "vda1_wr_bytes": 0,
+      "avg_latency_ms": 129.74625
+    },
+    "gpu_peak_gb": 184.39,
+    "verdict": "VERIFIED \u2705 anchor section 15 M1 at 128K -- decode critical path is SSD-free",
+    "per_token_trace": [
+      {
+        "tok_idx": 0,
+        "latency_ms": 285.59,
+        "proc_rd_count": 15,
+        "proc_wr_count": 1,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 264
+      },
+      {
+        "tok_idx": 1,
+        "latency_ms": 125.73,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 13
+      },
+      {
+        "tok_idx": 2,
+        "latency_ms": 124.69,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 578
+      },
+      {
+        "tok_idx": 3,
+        "latency_ms": 124.36,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 374
+      },
+      {
+        "tok_idx": 4,
+        "latency_ms": 124.29,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 264
+      },
+      {
+        "tok_idx": 5,
+        "latency_ms": 125.07,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 2678
+      },
+      {
+        "tok_idx": 6,
+        "latency_ms": 124.34,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 323
+      },
+      {
+        "tok_idx": 7,
+        "latency_ms": 124.48,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 323
+      },
+      {
+        "tok_idx": 8,
+        "latency_ms": 127.03,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 264
+      },
+      {
+        "tok_idx": 9,
+        "latency_ms": 124.5,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 2678
+      },
+      {
+        "tok_idx": 10,
+        "latency_ms": 124.06,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 13
+      },
+      {
+        "tok_idx": 11,
+        "latency_ms": 124.41,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 578
+      },
+      {
+        "tok_idx": 12,
+        "latency_ms": 124.51,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 13
+      },
+      {
+        "tok_idx": 13,
+        "latency_ms": 124.53,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 374
+      },
+      {
+        "tok_idx": 14,
+        "latency_ms": 124.3,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 264
+      },
+      {
+        "tok_idx": 15,
+        "latency_ms": 124.57,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 2678
+      },
+      {
+        "tok_idx": 16,
+        "latency_ms": 124.32,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 323
+      },
+      {
+        "tok_idx": 17,
+        "latency_ms": 126.12,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 323
+      },
+      {
+        "tok_idx": 18,
+        "latency_ms": 125.42,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 264
+      },
+      {
+        "tok_idx": 19,
+        "latency_ms": 124.39,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 2678
+      },
+      {
+        "tok_idx": 20,
+        "latency_ms": 124.58,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 13
+      },
+      {
+        "tok_idx": 21,
+        "latency_ms": 124.58,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 578
+      },
+      {
+        "tok_idx": 22,
+        "latency_ms": 124.74,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 374
+      },
+      {
+        "tok_idx": 23,
+        "latency_ms": 124.61,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 264
+      },
+      {
+        "tok_idx": 24,
+        "latency_ms": 124.55,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 2678
+      },
+      {
+        "tok_idx": 25,
+        "latency_ms": 124.44,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 323
+      },
+      {
+        "tok_idx": 26,
+        "latency_ms": 127.23,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 323
+      },
+      {
+        "tok_idx": 27,
+        "latency_ms": 124.41,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 264
+      },
+      {
+        "tok_idx": 28,
+        "latency_ms": 123.78,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 2678
+      },
+      {
+        "tok_idx": 29,
+        "latency_ms": 123.82,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 13
+      },
+      {
+        "tok_idx": 30,
+        "latency_ms": 124.04,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 578
+      },
+      {
+        "tok_idx": 31,
+        "latency_ms": 124.39,
+        "proc_rd_count": 15,
+        "proc_wr_count": 0,
+        "proc_rd_bytes": 0,
+        "proc_wr_bytes": 0,
+        "vda1_rd_bytes": 0,
+        "vda1_wr_bytes": 0,
+        "tok_id": 374
+      }
+    ]
+  }
+}
