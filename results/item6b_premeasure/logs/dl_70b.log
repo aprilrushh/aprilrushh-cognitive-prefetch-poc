@@ -1,0 +1,6 @@
+nohup: ignoring input
+/home/ubuntu/venvs/venv-anchor/lib/python3.10/site-packages/huggingface_hub/cli/download.py:189: UserWarning: Ignoring `--exclude` since filenames have been explicitly set.
+  warnings.warn("Ignoring `--exclude` since filenames have been explicitly set.")
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files:  12%|█▎        | 1/8 [00:42<04:54, 42.10s/it]Fetching 8 files: 100%|██████████| 8/8 [00:42<00:00,  5.26s/it]
+[32m✓ Downloaded[0m
+  path: /home/ubuntu/.cache/huggingface/hub/models--meta-llama--Llama-3.1-70B-Instruct/snapshots/1605565b47bb9346c5515c34102e054115b4f98b
