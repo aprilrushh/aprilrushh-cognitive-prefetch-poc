@@ -12,27 +12,27 @@
     "n_measure": 3
   },
   "load": {
-    "time_s": 23.65
+    "time_s": 25.89
   },
   "method_a_raw_tensor_to_cuda": {
     "rounds_measured": 3,
-    "avg_ms": 207.12,
-    "median_ms": 207.37,
-    "min_ms": 206.56,
-    "max_ms": 207.44,
-    "stdev_ms": 0.487,
-    "stdev_pct": 0.24,
-    "throughput_avg_gb_s": 50.6
+    "avg_ms": 207.91,
+    "median_ms": 207.29,
+    "min_ms": 207.28,
+    "max_ms": 209.16,
+    "stdev_ms": 1.08,
+    "stdev_pct": 0.52,
+    "throughput_avg_gb_s": 50.4
   },
   "method_b_dynamic_cache_reconstruct": {
     "rounds_measured": 3,
-    "avg_ms": 237.47,
-    "median_ms": 237.46,
-    "min_ms": 237.38,
-    "max_ms": 237.57,
-    "stdev_ms": 0.097,
-    "stdev_pct": 0.04,
-    "throughput_avg_gb_s": 44.2
+    "avg_ms": 236.84,
+    "median_ms": 236.87,
+    "min_ms": 236.76,
+    "max_ms": 236.88,
+    "stdev_ms": 0.067,
+    "stdev_pct": 0.03,
+    "throughput_avg_gb_s": 44.3
   },
   "theoretical_reference": {
     "pcie_gen5_x16_unidirectional_gb_s": 64.0,
@@ -44,8 +44,8 @@
     "pdf_ratio": 6.95,
     "method_a_vs_pdf": 6.9,
     "method_b_vs_pdf": 6.0,
-    "verdict_a": "VERIFIED \u2705 Method A 207.12 ms < PDF 1430 ms",
-    "verdict_b": "VERIFIED \u2705 Method B 237.47 ms < PDF 1430 ms"
+    "verdict_a": "VERIFIED \u2705 Method A 207.91 ms < PDF 1430 ms",
+    "verdict_b": "VERIFIED \u2705 Method B 236.84 ms < PDF 1430 ms"
   },
   "typing_window_hide_analysis": {
     "typing_window_min_ms": 10000,
@@ -54,7 +54,7 @@
     "method_b_hide_pct_of_max_window": 0.79,
     "user_perceived_latency_ms": "0 (promote fits well within typing window)"
   },
-  "anchor_section_15_m3_verdict": "VERIFIED \u2705 \u2014 RAM->HBM promote 237.47 ms << typing window 10-30s. User-perceived latency \u2248 0 (anchor \u00a7 15 M3 claim verified)",
+  "anchor_section_15_m3_verdict": "VERIFIED \u2705 \u2014 RAM->HBM promote 236.84 ms << typing window 10-30s. User-perceived latency \u2248 0 (anchor \u00a7 15 M3 claim verified)",
   "limitations": [
     "Passive promote only (no concurrent active decode \u2014 that's M1.4 Phase B)",
     "Synthetic random bf16 KV (not real Sherlock chunks)",
