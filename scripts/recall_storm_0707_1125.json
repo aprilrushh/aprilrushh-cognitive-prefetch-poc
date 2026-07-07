@@ -1,0 +1,40 @@
+{
+  "context": 32768,
+  "payload_GB": 3.355,
+  "phase_a_disk_to_ram": {
+    "1": {
+      "p50_s": 1.122,
+      "p95_s": 1.149,
+      "max_s": 1.149,
+      "n": 3,
+      "serialization_factor_p95": 1.0
+    },
+    "2": {
+      "p50_s": 1.175,
+      "p95_s": 1.234,
+      "max_s": 1.234,
+      "n": 6,
+      "serialization_factor_p95": 1.07
+    },
+    "4": {
+      "p50_s": 1.36,
+      "p95_s": 2.193,
+      "max_s": 2.813,
+      "n": 12,
+      "serialization_factor_p95": 1.91
+    },
+    "8": {
+      "p50_s": 2.692,
+      "p95_s": 3.177,
+      "max_s": 3.207,
+      "n": 24,
+      "serialization_factor_p95": 2.77
+    }
+  },
+  "phase_b_ram_to_hbm": null,
+  "notes": [
+    "Phase A absolute values are cloud virtio-blk specific; factors transfer",
+    "true end-to-end recall ~ max(disk, h2d) when pipelined; sum when naive",
+    "P5336 direct-attached numbers measured in PoC Week 1"
+  ]
+}
