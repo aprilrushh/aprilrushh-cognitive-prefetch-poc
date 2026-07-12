@@ -1,10 +1,20 @@
 import torch
 import math
+import os
 import concurrent.futures
 
+DEFAULT_IU_BYTES = 65536  # P5336 indirection unit (64 KiB)
+
 class NixlSerializationCore:
-    def __init__(self):
-        self.chunk_size_bytes = 65536  # 솔리다임 SSD 최적화 (64KB 정합)
+    def __init__(self, iu_bytes: int = None):
+        """iu_bytes: drive indirection-unit size in bytes.
+        Precedence: explicit arg > env XHBM_IU_BYTES > default 65536 (P5336).
+        Alignment is a config parameter, not a constant — Fosom Lake or any
+        other drive is a one-number change."""
+        if iu_bytes is None:
+            iu_bytes = int(os.environ.get("XHBM_IU_BYTES", DEFAULT_IU_BYTES))
+        assert iu_bytes > 0 and (iu_bytes & (iu_bytes - 1)) == 0, "IU must be a power of two"
+        self.chunk_size_bytes = iu_bytes
         self._executor = concurrent.futures.ThreadPoolExecutor(max_workers=2)
         
     def _reshape_to_bytes(self, tensor: torch.Tensor):
@@ -28,7 +38,7 @@ class NixlSerializationCore:
         total_elements = k_flat.numel() + v_flat.numel()
         total_bytes = total_elements * 2 
         
-        # 64KB 단위로 박스 개수 계산
+        # IU 단위(기본 64KB)로 박스 개수 계산
         num_boxes = math.ceil(total_bytes / self.chunk_size_bytes)
         
         return {
@@ -48,6 +58,6 @@ if __name__ == "__main__":
     
     print("=== NIXL Core Serialization Test ===")
     print(f"Total Bytes to Disk: {res['total_bytes']}")
-    print(f"Solidigm 64KB Boxes Required: {res['solidigm_boxes']}")
-    print(f"Residual Waste: {(res['solidigm_boxes'] * 65536) - res['total_bytes']} bytes")
+    print(f"Solidigm IU Boxes Required ({core.chunk_size_bytes} B/box): {res['solidigm_boxes']}")
+    print(f"Residual Waste: {(res['solidigm_boxes'] * core.chunk_size_bytes) - res['total_bytes']} bytes")
     print("Core PASS")

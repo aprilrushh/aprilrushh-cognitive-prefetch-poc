@@ -20,8 +20,8 @@ import argparse, json, os, random, threading, time, queue, statistics, sys
 from datetime import datetime, timezone
 
 PAYLOAD_PER_TOK = 102_400          # B/token: Cold-40 layers, K bf16 + V 4-bit (transport codec)
-CHUNK = 1 * 1024 * 1024            # 1 MiB write chunks (64KB-aligned multiple)
-ALIGN = 64 * 1024
+ALIGN = int(os.environ.get("XHBM_IU_BYTES", 64 * 1024))  # drive IU; override via env or --iu-kb
+CHUNK = max(1 * 1024 * 1024 // ALIGN, 1) * ALIGN         # ~1 MiB write chunks, exact IU multiple
 
 def ts():
     return datetime.now().strftime("%H:%M:%S")
@@ -89,7 +89,7 @@ class Session(threading.Thread):
             self.stats["demotes"] += 1
             self.stats["demote_secs"].append(dt)
         self.emit(f"session_{self.sid:02d} idle detected \u2192 demoting "
-                  f"{written/1e9:.2f} GB in single op (64KB-aligned, fsync-free) "
+                  f"{written/1e9:.2f} GB in single op ({ALIGN//1024}KB-aligned, fsync-free) "
                   f"\u2192 {written/1e9/dt:.2f} GB/s \u2192 HBM seat freed "
                   f"[cum {self.stats['app_bytes_written']/1e12:.3f} TB]")
         return dt
@@ -139,8 +139,10 @@ class Session(threading.Thread):
             self.stats["cycle_secs"].extend(cycle_marks)
 
 def main():
+    global ALIGN, CHUNK
     ap = argparse.ArgumentParser()
     ap.add_argument("--sessions", type=int, default=16)
+    ap.add_argument("--iu-kb", type=int, default=ALIGN // 1024, help="drive indirection unit in KiB (default 64 = P5336)")
     ap.add_argument("--context", type=int, default=32768)
     ap.add_argument("--duration", type=int, default=3600, help="seconds")
     ap.add_argument("--mean-active", type=float, default=120.0)
@@ -150,6 +152,8 @@ def main():
     ap.add_argument("--demo", action="store_true", help="print live demo log lines")
     ap.add_argument("--out", default=None)
     args = ap.parse_args()
+    ALIGN = args.iu_kb * 1024
+    CHUNK = max(1 * 1024 * 1024 // ALIGN, 1) * ALIGN
 
     payload = PAYLOAD_PER_TOK * args.context
     os.makedirs(args.data_dir, exist_ok=True)
