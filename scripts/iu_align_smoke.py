@@ -3,7 +3,8 @@
 iu_align_smoke.py — IU-parameterization smoke test (no GPU required)
 
 Verifies that the alignment layer is a config parameter, not a constant:
-for each candidate IU (4/16/64/512 KiB) it checks
+for each candidate IU (4/16/32/64/512 KiB) it checks
+  (P5336 QLC IU is 16 KiB or 32 KiB depending on capacity — Solidigm spec)
   (1) NixlSerializationCore box-packing math uses the injected IU
   (2) churn-pilot chunking produces IU-multiple write sizes (except the tail)
   (3) a real file written with the same pwrite loop lands at the exact payload size
@@ -68,7 +69,7 @@ def main():
     print(f"{'IU':>7} | core-IU | boxes/session | waste(B) | chunk(B) | body-align | tail-align | real-write")
     print("-" * 100)
     all_ok = True
-    for iu_kb in (4, 16, 64, 512):
+    for iu_kb in (4, 16, 32, 64, 512):
         iu = iu_kb * 1024
         core_ok, boxes, waste = check_boxes(iu, session_payload)
         chunk, nchunks, body, tail = check_chunking(iu, session_payload)

@@ -1,5 +1,5 @@
 {
-  "utc": "2026-07-12T10:21:44Z",
+  "utc": "2026-08-25T07:52:43Z",
   "purpose": "IU parameterization smoke \u2014 alignment is a config parameter",
   "cells": [
     {
@@ -16,6 +16,16 @@
       "iu_kb": 16,
       "core_injected": true,
       "boxes_per_session": 204800,
+      "residual_waste_bytes": 0,
+      "chunk_bytes": 1048576,
+      "body_chunks_iu_aligned": true,
+      "tail_iu_aligned": true,
+      "real_write_size_exact": true
+    },
+    {
+      "iu_kb": 32,
+      "core_injected": true,
+      "boxes_per_session": 102400,
       "residual_waste_bytes": 0,
       "chunk_bytes": 1048576,
       "body_chunks_iu_aligned": true,
